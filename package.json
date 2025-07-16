@@ -1,0 +1,46 @@
+{
+  "name": "@duque.edits/rest",
+  "version": "2.5.3",
+  "main": "index.js",
+  "types": "./index.d.ts",
+  "type": "commonjs",
+  "description": "An SDK that facilitates interaction with my API.",
+  "keywords": [
+    "REST",
+    "API",
+    "SDK",
+    "DuqueEdits"
+  ],
+  "scripts": {
+    "test": "ts-node tests/index.ts"
+  },
+  "author": "Duque Edits jedits077@gmail.com",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duque7x/sdk-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duque7x/sdk-api/issues"
+  },
+  "homepage": "https://github.com/duque7x/sdk-api#readme",
+  "dependencies": {
+    "undici": "^7.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^24.0.14",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.6.1",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
