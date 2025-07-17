@@ -7,4 +7,10 @@ export interface APILogMessage {
 
   /** Message's type */
   type: "text" | "img" | ".png" | ".gif" | ".jpg";
+
+  /** Creation Date */
+  createdAt: Date;
+
+  /** Updated Date */
+  updatedAt: Date;
 }

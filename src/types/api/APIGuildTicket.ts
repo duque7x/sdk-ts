@@ -1,6 +1,6 @@
 import { APILogMessage } from "./APILogMessage";
 
-export interface APITicket {
+export interface APIGuildTicket {
   /** Ticket's id */
   id: number;
 
@@ -27,4 +27,10 @@ export interface APITicket {
 
   /** Ticket's messages */
   messages: APILogMessage[];
+
+  /** Creation Date */
+  createdAt: Date;
+
+  /** Updated Date */
+  updatedAt: Date;
 };
