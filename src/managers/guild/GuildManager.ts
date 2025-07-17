@@ -1,11 +1,12 @@
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
 import { Collection } from "../../structures/Collection";
+import { Guild } from "../../structures/guild/Guild";
 import { APIGuild } from "../../types/api/APIGuild";
 
 export class GuildManager {
   /** A cache of guilds */
-  cache: Collection<string, typeof APIGuild>;
+  cache: Collection<string, Guild>;
 
   /** The rest client */
   rest: REST;
@@ -16,38 +17,35 @@ export class GuildManager {
    * @param rest The rest client
    */
   constructor(rest: REST) {
-    this.cache = new Collection<string, typeof APIGuild>();
+    this.cache = new Collection<string, Guild>();
     this.rest = rest;
-
   }
 
   /**
    * Fetch a guild
-   * @param id Id of the guild to fecth
+   * @param id Id of the guild to fetch
    * @returns APIGuild
    */
-  async fecth(id: string) {
+  async fetch(id: string): Promise<Guild> {
     const route = Routes.guilds.get(id);
-    const response = await this.rest.request<typeof APIGuild>({
+    const response = await this.rest.request<APIGuild, {}>({
       method: "get",
       url: route,
     });
 
-    return response;
+    return new Guild(response, this.rest);
   }
 
   async fetchAll() {
     const route = Routes.guilds.getAll();
-    const response = await this.rest.request<(typeof APIGuild)[]>({
+    const response = await this.rest.request<APIGuild[], {}>({
       method: "get",
       url: route,
     });
-    console.log({
-      response,
-      route
-    });
-    
-    for (let dt of response) this.cache.set(dt.id, dt);
-    return response;
+
+    for (let guildData of response) {
+      this.cache.set(guildData.id, new Guild(guildData, this.rest));
+    }
+    return this.cache;
   }
 }
