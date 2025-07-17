@@ -1,4 +1,7 @@
-export class Collection<K, V> extends Map {
+type Predicate = (x: unknown) => boolean;
+type Optional<T> = { [K in keyof T]?: T[K] };
+
+export class Collection<K, V> extends Map<K, V> {
   key: string;
 
   constructor(data?: Iterable<V>, key?: string) {
@@ -7,7 +10,7 @@ export class Collection<K, V> extends Map {
 
     if (data && Array.isArray(data) && key) {
       if (data.length > 0) return;
-      for (let v of data) this.set(key, v);
+      for (let v of data) this.set(key as K, v);
     }
   }
   at(index: number) {
@@ -64,7 +67,7 @@ export class Collection<K, V> extends Map {
   toJSON() {
     let obj: Record<string, unknown> = {};
     for (let [k, v] of this.entries()) {
-      obj[k] = v;
+      obj[`${k}`] = v;
     }
     return obj;
   }
