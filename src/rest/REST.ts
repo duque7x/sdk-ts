@@ -4,6 +4,9 @@ import { request, Headers } from "undici";
 import { Routes } from "./Routes";
 import env from "dotenv";
 import { GuildManager } from "../managers/guild/GuildManager";
+import { Bet } from "../structures/bet/Bet";
+import { Collection } from "../structures/Collection";
+import { BetUser } from "../structures/betuser/BetUser";
 env.config();
 
 const Reset = "\x1b[0m";
@@ -11,6 +14,17 @@ const FgGreen = "\x1b[32m";
 const FgRed = "\x1b[31m";
 const FgBlue = "\x1b[34m";
 const FgCyan = "\x1b[36m";
+
+interface RequestOptions<Payload> {
+  /** The request's method */
+  method: string;
+
+  /** The request's url */
+  url: string;
+
+  /** The request payload */
+  payload?: Payload;
+}
 
 /**
  * The main class of this package
@@ -23,6 +37,10 @@ export class REST extends EventEmitter {
 
   /** The guild manager */
   guilds: GuildManager;
+
+  bets: Collection<string, Bet>;
+  betUsers: Collection<string, BetUser>;
+
   /**
    *
    * @param key The unique key for he client
@@ -33,10 +51,11 @@ export class REST extends EventEmitter {
     if (key) {
       Assertion.assertString(key);
       this.key = key;
-      console.log({ ky: this.key, key });
     }
 
     this.guilds = new GuildManager(this);
+    this.bets = new Collection<string, Bet>();
+    this.betUsers = new Collection<string, BetUser>();
   }
   /**
    * Set the api key
@@ -45,21 +64,23 @@ export class REST extends EventEmitter {
   setKey(key: string) {
     this.key = key;
   }
+
+  /** Initialize the caching sistem */
   async init() {
     await this.guilds.fetchAll();
     return this;
   }
-  async request<T>(options: {
-    method: string;
-    url: string;
-    payload?: Record<string, unknown>;
-    expecting?: T;
-  }) {
-    let { method, url, payload, expecting } = options;
+
+  /**
+   * Request Data from a certain url
+   * @param options
+   * @returns
+   */
+  async request<Expecting, Payload>(options: RequestOptions<Payload>) {
+    let { method, url, payload } = options;
     Assertion.assertString(method);
     Assertion.assertString(this.key);
     Assertion.assertString(url);
-    Assertion.assertObject(payload);
 
     method = method.toUpperCase();
     url = Routes.base + url;
@@ -84,6 +105,7 @@ export class REST extends EventEmitter {
     const { data, message } = body as Record<string, unknown>;
     if (message) this.emit("debug", `${FgRed}${message}${Reset}`);
     this.emit("debug", `[Request]${FgGreen} done.${Reset}`);
-    return data as T;
+
+    return data as Expecting;
   }
 }
