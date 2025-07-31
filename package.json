@@ -1,8 +1,9 @@
 {
-  "name": "@duque.edits/rest",
-  "version": "2.5.3",
-  "main": "index.js",
-  "types": "./index.d.ts",
+  "name": "@duque.edits/sdk",
+  "version": "0.0.8",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "type": "commonjs",
   "description": "An SDK that facilitates interaction with my API.",
   "keywords": [
@@ -11,6 +12,10 @@
     "SDK",
     "DuqueEdits"
   ],
+  "files": [
+    "./dist",
+    "./package.json"
+  ],
   "scripts": {
     "test": "ts-node tests/index.ts"
   },
@@ -18,12 +23,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/duque7x/sdk-api.git"
+    "url": "https://github.com/duque7x/sdk-ts.git"
   },
   "bugs": {
-    "url": "https://github.com/duque7x/sdk-api/issues"
+    "url": "https://github.com/duque7x/sdk-ts/issues"
   },
-  "homepage": "https://github.com/duque7x/sdk-api#readme",
+  "homepage": "https://github.com/duque7x/sdk-ts#readme",
   "dependencies": {
     "undici": "^7.10.0"
   },
@@ -36,6 +41,16 @@
     "globals": "^16.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./v1": {
+      "require": "./dist/v1",
+      "types": "./dist/index.d.ts"
+    }
   },
   "publishConfig": {
     "access": "public"

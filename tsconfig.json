@@ -11,5 +11,5 @@
     "removeComments": false,
     "strictNullChecks": false,
   },
-  "include": ["src"]
+  "include": ["v1"]
 }
