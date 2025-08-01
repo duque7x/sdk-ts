@@ -15,6 +15,7 @@ import { APIBetMessage } from "../../types/api/APIBetMessage";
 import {
   APIGuild,
   DailyCategories,
+  GuildPrices,
   GuildScores,
   GuildStatus,
   GuildTicketConfiguration,
@@ -110,7 +111,8 @@ export class Guild {
 
   /** Guild Roles */
   roles: APIGuildRole[];
-
+  /** Guild Prices Used */
+  prices: GuildPrices;
   /** Guild Shop */
   shop: GuildShop;
 
@@ -142,6 +144,7 @@ export class Guild {
 
     this.pricesAvailable = data?.pricesAvailable;
     this.pricesOn = data?.pricesOn;
+    this.prices = data?.prices;
 
     this.shop = new GuildShop(data?.shop, this, rest);
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
@@ -166,7 +169,7 @@ export class Guild {
     this.categories = new GroupedChannelManager(this, "categories", rest);
     this.tickets = new GuildTicketManager(this, rest);
     this.permissionsManager = new GuildPermissionManager(this, rest);
-    this.buffer  = new BufferManager(this);
+    this.buffer = new BufferManager(this);
 
     this.bets.setAll(data?.bets);
     this.users.setAll(data?.users);
@@ -243,15 +246,14 @@ export class Guild {
   async addPrice(price: number) {
     Assertion.assertNumber(price);
 
-    const route = Routes.fields(Routes.guilds.resource(this.id, "price"), "pricesOn");
+    const route = Routes.fields(Routes.guilds.resource(this.id, "prices"), "used");
     const payload = { price };
-    const response = await this.rest.request<APIGuild, typeof payload>({
-      method: "PATCH",
+    const response = await this.rest.request<number[], typeof payload>({
+      method: "POST",
       url: route,
       payload,
     });
-    this.pricesAvailable = response.pricesAvailable;
-    this.pricesOn = response.pricesOn;
+    this.prices.used = response;
     this.rest.guilds.cache.set(this.id, this);
     this.rest.emit("guildUpdate", this);
     return this;
@@ -259,16 +261,15 @@ export class Guild {
   async removePrice(price: number) {
     Assertion.assertNumber(price);
 
-    const route = Routes.fields(Routes.guilds.resource(this.id, "price"), "pricesOn");
+    const route = Routes.fields(Routes.guilds.resource(this.id, "prices"), "used", price.toString());
     const payload = { price };
-    const response = await this.rest.request<APIGuild, typeof payload>({
+    const response = await this.rest.request<number[], typeof payload>({
       method: "DELETE",
       url: route,
       payload,
     });
 
-    this.pricesAvailable = response.pricesAvailable;
-    this.pricesOn = response.pricesOn;
+    this.prices.used = response;
     this.rest.guilds.cache.set(this.id, this);
     this.rest.emit("guildUpdate", this);
     return this;

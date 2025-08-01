@@ -31,6 +31,10 @@ export interface GuildStatus {
 }
 export type DailyCategories = "coins" | "credit" | "wins" | "points" | "losses" | "mvps";
 
+export interface GuildPrices {
+  on: number[];
+  used: number[];
+}
 export interface GuildScores {
   /** Win */
   win: number;
@@ -89,6 +93,8 @@ export interface APIGuild {
 
   /** Guild Prices Used */
   pricesOn: number[];
+  /** Guild Prices Used */
+  prices: GuildPrices;
 
   /** Guild Creation Date */
   createdAt: Date;
