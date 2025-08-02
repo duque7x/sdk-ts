@@ -234,7 +234,7 @@ export class GuildUser implements APIGuildUser {
     this.manager.cache.set(this.id, this);
     return this;
   }
- 
+
   async delete() {
     const route = Routes.guilds.users.delete(this.manager.guild.id, this.id);
     const response = await this.rest.request<boolean, {}>({
@@ -244,7 +244,7 @@ export class GuildUser implements APIGuildUser {
 
     this.rest.emit("betUserDelete", this);
     this.manager.cache.delete(this.id);
-    this.rest.users.set(this.id, this);
+
     return response;
   }
   toJSON() {

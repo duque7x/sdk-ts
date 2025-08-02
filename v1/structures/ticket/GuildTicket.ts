@@ -139,7 +139,7 @@ export class GuildTicket {
     const response = await this.rest.request<APIGuildTicket, typeof payload>({
       method: "PATCH",
       url: route,
-      payload
+      payload,
     });
     this.customerRating = response.customerRating;
     this.manager.cache.set(this.id, this);
@@ -177,8 +177,6 @@ export class GuildTicket {
       method: "DELETE",
       url: route,
     });
-
-    this.manager.cache.set(this.id, this);
     this.manager.cache.delete(this.id);
     return response;
   }

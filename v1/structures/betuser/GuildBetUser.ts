@@ -224,7 +224,7 @@ export class GuildBetUser implements APIGuildBetUser {
 
     this.rest.emit("betUserDelete", this);
     this.manager.cache.delete(this.id);
-    this.rest.betUsers.set(this.id, this);
+
     return response;
   }
   toJSON() {

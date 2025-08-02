@@ -124,7 +124,6 @@ export class GuildBet {
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
 
-
     this.channels.setAll(data?.channels);
     this.messages.setAll(data?.messages);
   }
@@ -231,6 +230,9 @@ export class GuildBet {
       method: "DELETE",
       url: route,
     });
+
+    this.manager.cache.delete(this?._id);
+    this.rest.bets.delete(this?._id);
     return response;
   }
   async addChannel(id: string, type: string) {

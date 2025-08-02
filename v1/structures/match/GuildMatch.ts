@@ -373,6 +373,17 @@ export class GuildMatch {
     this.rest.matches.set(this._id, this);
     return this;
   }
+  async delete() {
+    const route = Routes.guilds.matches.resource(this.guild.id, this._id);
+    const response = await this.rest.request<boolean, {}>({
+      method: "DELETE",
+      url: route,
+    });
+
+    this.manager.cache.delete(this?._id);
+    this.rest.matches.delete(this?._id);
+    return response;
+  }
   toJSON() {
     const json: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(this)) {
