@@ -55,7 +55,6 @@ export class GuildTicketManager {
 
     const ticket = new GuildTicket(response, this.guild, this, this.rest);
     this.cache.set(ticket.id, ticket);
-
     return ticket;
   }
 
