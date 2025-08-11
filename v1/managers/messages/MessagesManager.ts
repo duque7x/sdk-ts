@@ -32,11 +32,11 @@ export class MessagesManager {
     this.guild = guild;
     this.key = key;
     this.baseUrl = Routes.fields(Routes.guilds.get(guild?.id), key, "messages");
-    
+
     this.cache = new Collection<string, APIMessage>(`${key}-messages`);
     this.rest = rest;
   }
-  async create(payload: Optional<APIMessage>): Promise<APIMessage> {
+  async create(payload: Optional<APIMessage>): Promise<boolean> {
     Assertion.assertObject(payload);
 
     const route = this.baseUrl;
@@ -45,8 +45,9 @@ export class MessagesManager {
       url: route,
       payload,
     });
-    const message = this.set(response);
-    return message;
+    this.set(response);
+
+    return true;
   }
 
   /**
@@ -60,10 +61,10 @@ export class MessagesManager {
       method: "get",
       url: route,
     });
-    const channel = this.set(response);
-    this.cache.set(channel.type, channel);
+    const message = this.set(response);
+    this.set(response);
 
-    return channel;
+    return response;
   }
 
   async fetchAll() {
@@ -80,10 +81,16 @@ export class MessagesManager {
     return this.cache;
   }
 
-  set(data: APIMessage): APIMessage {
-    if (!data?.type) return;
-    this.cache.set(data?.type, data);
-    return data;
+  set(data: APIMessage | APIMessage[]): Collection<string, APIMessage> {
+    if (Array.isArray(data)) {
+      for (let message of data) {
+        if (!message?.type) return;
+        this.cache.set(`${message?.userId}-${Date.now()}`, message);
+      }
+    } else {
+      this.cache.set(`${data?.userId}-${Date.now()}`, data);
+    }
+    return this.cache;
   }
   setAll(data: APIMessage[]) {
     if (!data) return this.cache;
