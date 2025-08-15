@@ -76,7 +76,7 @@ export class MessagesManager {
 
     for (let data of response) {
       if (!data.type) continue;
-      this.cache.set(data?.type, data);
+      this.cache.set(`${data?.userId}-${Date.now() * Math.random() + 100}`, data);
     }
     return this.cache;
   }
@@ -85,10 +85,10 @@ export class MessagesManager {
     if (Array.isArray(data)) {
       for (let message of data) {
         if (!message?.type) return;
-        this.cache.set(`${message?.userId}-${Date.now()}`, message);
+        this.cache.set(`${message?.userId}-${Date.now() * Math.random() + 50}`, message);
       }
     } else {
-      this.cache.set(`${data?.userId}-${Date.now()}`, data);
+      this.cache.set(`${data?.userId}-${Date.now() * Math.random() + 5}`, data);
     }
     return this.cache;
   }
