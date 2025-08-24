@@ -13,10 +13,6 @@ client.init().then(async () => {
   const guilds = client.guilds;
   const guild = client.guilds.cache.get("1397025735545327789")!;
 
-  const betsData: Optional<APIGuildBet>[] = guild.pricesOn
-    .sort((a, b) => b - a)
-    .map((price) => ({ price, creatorId: "877598927149490186", type: "4v4", mode: "emu" }));
-  const bulkCreate = await guild.bets.createMany(betsData);
-
-  console.log({ bulkCreate });
+  const vipmembers = guild.vipMembers.cache;
+  console.log(vipmembers);
 });

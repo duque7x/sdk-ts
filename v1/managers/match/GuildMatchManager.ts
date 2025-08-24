@@ -39,6 +39,8 @@ export class GuildMatchManager {
       method: "get",
       url: route,
     });
+    if (!response.creatorId) return null;
+
     const match = new GuildMatch(response, this.guild, this, this.rest);
     this.cache.set(match._id, match);
     this.rest.matches.set(match._id, match);

@@ -2,8 +2,8 @@ import { APIEndpoints } from "./APIEndpoints";
 export const Route = <K>(route: string) => route;
 
 export const Routes = {
-  //base: "http://localhost:3000/api/v1",
-  base: "https://duquedev.up.railway.app/api/v1",
+  base: "http://localhost:3000/api/v1",
+  //base: "https://duquedev.up.railway.app/api/v1",
 
   field: (field: string) => `${field}`,
   fields: (...fields: string[]) => `${fields.join("/")}`,
@@ -108,5 +108,15 @@ export const Routes = {
           `/guilds/${guildId}/shop/products/${productId}/${resources.join("/")}`,
       },
     },
+  },
+
+  vipmembers: {
+    get: (guildId: string, memberId: string) => `/guilds/${guildId}/vipmembers/${memberId}`,
+    getAll: (guildId: string) => `/guilds/${guildId}/vipmembers`,
+    deleteAll: (guildId: string) => `/guilds/${guildId}/vipmembers`,
+    create: (guildId: string) => `/guilds/${guildId}/vipmembers`,
+
+    update: (guildId: string, memberId: string) => `/guilds/${guildId}/vipmembers/${memberId}`,
+    delete: (guildId: string, memberId: string) => `/guilds/${guildId}/vipmembers/${memberId}`,
   },
 };

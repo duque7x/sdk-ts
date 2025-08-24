@@ -5,9 +5,12 @@ import { GuildMatch } from "../../structures/match/GuildMatch";
 import { GuildTicket } from "../../structures/ticket/GuildTicket";
 import { APIGuildMatch, APIGuildTicket, Optional } from "../../types";
 
+export type BufferMatch = Optional<APIGuildMatch & { id: string }>;
+export type BufferTicket = Optional<APIGuildTicket & { id: string }>;
+
 export class BufferManager {
-  matches: Collection<string, Optional<APIGuildMatch & { id: string }>>;
-  tickets: Collection<string, Optional<APIGuildTicket & { id: string }>>;
+  matches: Collection<string, BufferMatch>;
+  tickets: Collection<string, BufferTicket>;
 
   guild: Guild;
   constructor(guild: Guild) {
@@ -31,5 +34,11 @@ export class BufferManager {
       return response;
     }
     return;
+  }
+  createMatch(id: string, data: BufferMatch) {
+    this.matches.set(id, data);
+  }
+  createTicket(id: string, data: BufferTicket) {
+    this.tickets.set(id, data);
   }
 }

@@ -9,8 +9,8 @@ export interface APIMessage {
   type: "text" | "img" | ".png" | ".gif" | ".jpg";
 
   /** Creation Date */
-  createdAt: Date;
+  createdAt?: Date;
 
   /** Updated Date */
-  updatedAt: Date;
+  updatedAt?: Date;
 }

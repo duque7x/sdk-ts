@@ -10,6 +10,7 @@ import { GuildBetUser } from "../structures/betuser/GuildBetUser";
 import { GuildMatch } from "../structures/match/GuildMatch";
 import { GuildMediator } from "../structures/mediator/GuildMediator";
 import { GuildUser } from "../structures/user/GuildUser";
+import { VipMemberManager } from "../managers/vipmember/VipMemberManager";
 env.config();
 
 const Reset = "\x1b[0m";
@@ -60,6 +61,7 @@ export class REST extends EventEmitter {
     }
 
     this.guilds = new GuildManager(this);
+
     this.bets = new Collection<string, GuildBet>("bets");
     this.matches = new Collection<string, GuildMatch>("matches");
     this.betUsers = new Collection<string, GuildBetUser>("betUsers");
@@ -100,10 +102,7 @@ export class REST extends EventEmitter {
     headers.append("duque-client-key", this.key);
 
     const before = Date.now();
-    this.emit(
-      "debug",
-      [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n")
-    );
+    this.emit("debug", [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n"));
 
     const res = await request(url, {
       method,
@@ -116,10 +115,7 @@ export class REST extends EventEmitter {
     const now = new Date().getTime();
 
     if (message) this.emit("debug", `${FgRed}${message}${Reset}`);
-    this.emit(
-      "debug",
-      `[Request]${FgGreen} ${(now - before) / 1000}s done.${Reset}`
-    );
+    this.emit("debug", `[Request]${FgGreen} ${(now - before) / 1000}s done.${Reset}`);
 
     return data as Expecting;
   }

@@ -8,6 +8,7 @@ import { MessagesManager } from "../../managers/messages/MessagesManager";
 import { GuildPermissionManager } from "../../managers/permission/GuildPermissionManager";
 import { GuildTicketManager } from "../../managers/ticket/GuildTicketManager";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
+import { VipMemberManager } from "../../managers/vipmember/VipMemberManager";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
 import { Daily, GuildBlacklist } from "../../types/api";
@@ -119,6 +120,7 @@ export class Guild {
   permissionsManager: GuildPermissionManager;
   buffer: BufferManager;
 
+  vipMembers: VipMemberManager;
   /**
    * The guild structure
    * @param data The guild's data
@@ -169,6 +171,7 @@ export class Guild {
     this.categories = new GroupedChannelManager(this, "categories", rest);
     this.tickets = new GuildTicketManager(this, rest);
     this.permissionsManager = new GuildPermissionManager(this, rest);
+    this.vipMembers = new VipMemberManager(this, rest);
     this.buffer = new BufferManager(this);
 
     this.bets.setAll(data?.bets);
@@ -181,6 +184,8 @@ export class Guild {
     this.tickets.setAll(data?.tickets);
     this.permissionsManager.setAll(data?.permissions);
     this.messages.setAll(data?.messages);
+
+    this.vipMembers.fetchAll();
   }
 
   async fetch(): Promise<Guild> {
