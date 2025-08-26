@@ -11,6 +11,7 @@ import { GuildMatch } from "../structures/match/GuildMatch";
 import { GuildMediator } from "../structures/mediator/GuildMediator";
 import { GuildUser } from "../structures/user/GuildUser";
 import { VipMemberManager } from "../managers/vipmember/VipMemberManager";
+import { GiveawayManager } from "../managers/giveaway/GiveawayManager";
 env.config();
 
 const Reset = "\x1b[0m";
@@ -41,6 +42,7 @@ export class REST extends EventEmitter {
 
   /** The guild manager */
   guilds: GuildManager;
+  giveaways: GiveawayManager;
 
   bets: Collection<string, GuildBet>;
   matches: Collection<string, GuildMatch>;
@@ -61,6 +63,7 @@ export class REST extends EventEmitter {
     }
 
     this.guilds = new GuildManager(this);
+    this.giveaways = new GiveawayManager(this);
 
     this.bets = new Collection<string, GuildBet>("bets");
     this.matches = new Collection<string, GuildMatch>("matches");
@@ -78,7 +81,7 @@ export class REST extends EventEmitter {
 
   /** Initialize the caching sistem */
   async init() {
-    await this.guilds.fetchAll();
+    await Promise.all([this.guilds.fetchAll(), this.giveaways.fetchAll()]);
     return this;
   }
 

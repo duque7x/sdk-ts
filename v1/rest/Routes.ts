@@ -119,4 +119,14 @@ export const Routes = {
     update: (guildId: string, memberId: string) => `/guilds/${guildId}/vipmembers/${memberId}`,
     delete: (guildId: string, memberId: string) => `/guilds/${guildId}/vipmembers/${memberId}`,
   },
+
+  giveaways: {
+    get: (giveawayId: string) => `/giveaways/${giveawayId}`,
+    getAll: () => `/giveaways`,
+    deleteAll: () => `/giveaways`,
+    create: () => `/giveaways`,
+
+    update: (giveawayId: string) => `/giveaways/${giveawayId}`,
+    delete: (giveawayId: string) => `/giveaways/${giveawayId}`,
+  },
 };

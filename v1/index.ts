@@ -10,6 +10,8 @@ export * from "./managers/permission/GuildPermissionManager";
 export * from "./managers/product/GuildProductManager";
 export * from "./managers/ticket/GuildTicketManager";
 export * from "./managers/user/GuildUserManager";
+export * from "./managers/vipmember/VipMemberManager";
+export * from "./managers/giveaway/GiveawayManager";
 
 export * from "./structures/bet/GuildBet";
 export * from "./structures/betuser/GuildBetUser";
@@ -22,6 +24,8 @@ export * from "./structures/product/GuildProduct";
 export * from "./structures/shop/GuildShop";
 export * from "./structures/ticket/GuildTicket";
 export * from "./structures/user/GuildUser";
+export * from "./structures/vipmember/VipMember";
+export * from "./structures/giveaway/Giveaway";
 export * from "./structures/Collection";
 
 export * from "./rest/REST";

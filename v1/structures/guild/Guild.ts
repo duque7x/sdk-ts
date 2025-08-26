@@ -332,4 +332,22 @@ export class Guild {
     this.rest.emit("guildUpdate", this);
     return this;
   }
+
+  async setScore(name: AvailableScores, amount: number) {
+    const route = Routes.fields(Routes.guilds.resources(this.id, "scores", name));
+
+    const payload = { amount };
+    const response = await this.rest.request<GuildScores, typeof payload>({
+      method: "patch",
+      url: route,
+      payload,
+    });
+
+    this.scores = response;
+    this.rest.guilds.cache.set(this.id, this);
+    this.rest.emit("guildUpdate", this);
+    return this;
+  }
 }
+
+type AvailableScores = "win" | "loss" | "mvp" | "creator" | "coin";
