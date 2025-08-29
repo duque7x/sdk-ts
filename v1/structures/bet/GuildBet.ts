@@ -325,6 +325,8 @@ export class GuildBet {
     }
     this.rest.bets.set(this._id, this);
     this.manager.cache.set(this._id, this);
+    this.updatedAt = response?.updatedAt ? new Date(response?.updatedAt) : new Date();
+    this.createdAt = response?.createdAt ? new Date(response?.createdAt) : new Date();
     return this;
   }
   toJSON() {

@@ -8,11 +8,14 @@ export interface APIVipMember {
   /** Members's roleId */
   roleId: string;
 
+  duration: Date;
+  status: "on" | "off";
+  
   /** Members's voiceChannelId */
   voiceChannelId: string;
 
   /** Vip's type */
-  type: string;
+  type: "both" | "role" | "channel";
 
   /** Member's Guild Id */
   guild_id: string;

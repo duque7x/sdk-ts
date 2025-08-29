@@ -230,6 +230,9 @@ export class GuildUser implements APIGuildUser {
         (this as any)[k] = response[k as keyof APIGuildUser];
       }
     }
+    this.updatedAt = response?.updatedAt ? new Date(response?.updatedAt) : new Date();
+    this.createdAt = response?.createdAt ? new Date(response?.createdAt) : new Date();
+
     this.rest.users.set(this.id, this);
     this.manager.cache.set(this.id, this);
     return this;

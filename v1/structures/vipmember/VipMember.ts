@@ -19,11 +19,12 @@ export class VipMember implements APIVipMember {
   voiceChannelId: string;
 
   /** Vip's type */
-  type: string;
+  type: "both" | "role" | "channel";
 
   /** Member's Guild Id */
   guild_id: string;
-
+  duration: Date;
+  status: "on" | "off";
   /** member's daily */
   createdAt: Date;
 
@@ -44,18 +45,22 @@ export class VipMember implements APIVipMember {
    * @param rest The rest client
    */
   constructor(data: APIVipMember, manager: VipMemberManager, rest: REST) {
-    this.name = data.name;
-    this.id = data.id;
-    this.roleId = data.roleId;
-    this.voiceChannelId = data.voiceChannelId;
-    this.guild_id = data.guild_id;
-    this.guild = manager.guild;
+    this.name = data?.name;
+    this.id = data?.id;
+
+    this.duration = data?.duration ? new Date(data?.duration) : new Date();
+    this.status = data?.status;
+
+    this.roleId = data?.roleId;
+    this.voiceChannelId = data?.voiceChannelId;
+    this.guild_id = data?.guild_id;
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
 
     this.manager = manager;
     this.rest = rest;
+    this.guild = manager.guild;
   }
   /** String representation of this member */
   toString() {
@@ -104,7 +109,7 @@ export class VipMember implements APIVipMember {
    * @returns
    */
   async update(data: Optional<APIVipMember>) {
-    const route = Routes.vipmembers.get(this.guild_id, this.id);
+    const route = Routes.vipmembers.get(this.guild.id, this.id);
     const payload: Record<string, any> = data;
 
     const response = await this.rest.request<APIVipMember, typeof payload>({
@@ -120,6 +125,7 @@ export class VipMember implements APIVipMember {
     }
 
     this.updatedAt = response?.updatedAt ? new Date(response?.updatedAt) : new Date();
+    this.duration = response?.duration ? new Date(response?.duration) : new Date();
     this.createdAt = response?.createdAt ? new Date(response?.createdAt) : new Date();
     this.manager.cache.set(this.id, this);
 
