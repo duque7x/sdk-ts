@@ -2,8 +2,8 @@ import { APIEndpoints } from "./APIEndpoints";
 export const Route = <K>(route: string) => route;
 
 export const Routes = {
-  base: "http://localhost:3000/api/v1",
-  //base: "https://duquedev.up.railway.app/api/v1",
+  //base: "http://localhost:3000/api/v1",
+  base: "https://duquedev.up.railway.app/api/v1",
 
   field: (field: string) => `${field}`,
   fields: (...fields: string[]) => `${fields.join("/")}`,

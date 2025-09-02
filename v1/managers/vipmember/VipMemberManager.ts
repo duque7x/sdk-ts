@@ -69,6 +69,7 @@ export class VipMemberManager {
       this.cache.clear();
       return this.cache;
     }
+    
     this.setAll(response);
     return this.cache;
   }

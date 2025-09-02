@@ -50,6 +50,7 @@ export class VipMember implements APIVipMember {
 
     this.duration = data?.duration ? new Date(data?.duration) : new Date();
     this.status = data?.status;
+    this.type = data?.type;
 
     this.roleId = data?.roleId;
     this.voiceChannelId = data?.voiceChannelId;
@@ -92,6 +93,9 @@ export class VipMember implements APIVipMember {
     });
 
     this.#updateData(response);
+    this.type = response.type;
+    this.manager.set(response);
+
     return this;
   }
   #updateData(data: Optional<APIVipMember | VipMember>) {
@@ -127,6 +131,8 @@ export class VipMember implements APIVipMember {
     this.updatedAt = response?.updatedAt ? new Date(response?.updatedAt) : new Date();
     this.duration = response?.duration ? new Date(response?.duration) : new Date();
     this.createdAt = response?.createdAt ? new Date(response?.createdAt) : new Date();
+    this.type = response.type;
+
     this.manager.cache.set(this.id, this);
 
     return this;
