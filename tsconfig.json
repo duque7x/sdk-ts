@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "skipDefaultLibCheck": true,
     "removeComments": false,
     "strictNullChecks": false,
+    "declarationDir": "./types",
+    "declaration": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "pretty": true,
+    "newLine": "lf",
+    "downlevelIteration": false,
   },
-  "include": ["v1"]
+  "include": [
+    "src",
+  ]
 }

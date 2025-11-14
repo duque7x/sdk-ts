@@ -1,0 +1,30 @@
+import { TicketManager } from "../../managers/ticket/TicketManager";
+import { REST } from "../../rest";
+import { APIGuildTicket, APILogMessage, Optional } from "../../types";
+import { Guild } from "../guild/Guild";
+export declare class GuildTicket implements APIGuildTicket {
+    _id: string;
+    guild_id: string;
+    type: string;
+    status: "on" | "off";
+    admin_id: string;
+    channel_id: string;
+    closed_by_id: string;
+    creator_id: string;
+    customer_rating: number;
+    messages: APILogMessage[];
+    createdAt: Date;
+    updatedAt: Date;
+    readonly rest: REST;
+    readonly guild: Guild;
+    readonly manager: TicketManager;
+    constructor(data: APIGuildTicket, manager: any);
+    fetch(): Promise<GuildTicket>;
+    setCustomerRating(rating: number): Promise<GuildTicket>;
+    setAdminId(id: string): Promise<GuildTicket>;
+    setChannelId(id: string): Promise<GuildTicket>;
+    setClosedById(id: string): Promise<GuildTicket>;
+    setStatus(status: "on" | "off"): Promise<GuildTicket>;
+    addMessage(message: Optional<APILogMessage>): Promise<GuildTicket>;
+    _updateInternals(data: Optional<APIGuildTicket>): this;
+}

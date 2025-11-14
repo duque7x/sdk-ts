@@ -1,11 +1,12 @@
 {
   "name": "@duque.edits/sdk",
-  "version": "0.1.5",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "typings": "./dist/index.d.ts",
+  "version": "0.1.7",
+  "main": "dist/index",
+  "types": "./types/index.d.ts",
+  "typings": "./types/index.d.ts",
   "type": "commonjs",
   "description": "An SDK that facilitates interaction with my API.",
+  "module": "dist/duque.edits-sdk.esm.js",
   "keywords": [
     "REST",
     "API",
@@ -13,11 +14,14 @@
     "DuqueEdits"
   ],
   "files": [
-    "./dist",
-    "./package.json"
+    "dist",
+    "types"
   ],
   "scripts": {
-    "test": "ts-node tests/index.ts"
+    "test": "ts-node tests/index.ts",
+    "match": "ts-node tests/match.ts",
+    "guild": "ts-node tests/guild.ts",
+    "user": "ts-node tests/user.ts"
   },
   "author": "Duque Edits jedits077@gmail.com",
   "license": "ISC",
@@ -42,20 +46,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./v1": {
-      "require": "./dist/v1",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "publishConfig": {
     "access": "public"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=20"
   }
 }
