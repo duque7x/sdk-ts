@@ -2,7 +2,7 @@ import { Collection, Guild } from "../../structures";
 import { Optional } from "../../types";
 import { APILogEntry } from "../../types/api/APILogEntry";
 import { BaseManager } from "../base";
-export default class extends BaseManager<APILogEntry> {
+export declare class LogManager extends BaseManager<APILogEntry> {
     constructor(guild: Guild);
     fetch(): Promise<APILogEntry[]>;
     create(data: Optional<APILogEntry>): Promise<APILogEntry>;

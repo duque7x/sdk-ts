@@ -6,7 +6,7 @@ import {
   GuildUserManager,
   LogManager,
   VipMemberManager,
-} from "../../managers";
+} from "#managers";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
 import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";

@@ -84,9 +84,3 @@ export declare enum GuildChannelsType {
     UserLogs = "user_logs",
     ManagingLogs = "managing_logs"
 }
-export declare enum GuildMatchChannelsType {
-    CreationChannel = "creation_channel"
-}
-export declare enum GuildMatchMessagesType {
-    CreationMessage = "creation_message"
-}

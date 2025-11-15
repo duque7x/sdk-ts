@@ -1,14 +1,7 @@
-import { GuildPermissionManager } from "../../managers/permission/GuildPermissionManager";
-import { BufferManager } from "../../managers/buffer/BufferManager";
-import { GuildMatchManager } from "../../managers/match/GuildMatchManager";
-import { VipMemberManager } from "../../managers/vipmember/VipMemberManager";
+import { BufferManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "#managers";
 import { REST } from "../../rest/REST";
-import { APIGuildGroupedChannel, Daily, Optional } from "../../types/api";
+import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";
-import { APIGuildPermissions } from "../../types/api/APIGuildPermissions";
-import { GuildUserManager } from "../../managers/user/GuildUserManager";
-import { GuildTicketManager } from "../../managers";
-import LogManager from "../../managers/logs/LogManager";
 export declare class Guild {
     /** The data of this guild */
     data: APIGuild;
@@ -47,6 +40,7 @@ export declare class Guild {
     vipMembers: VipMemberManager;
     users: GuildUserManager;
     logEntries: LogManager;
+    shop: APIGuildShop;
     /**
      * The guild structure
      * @param data The guild's data

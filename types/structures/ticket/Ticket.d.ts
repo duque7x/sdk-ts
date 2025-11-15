@@ -1,7 +1,7 @@
-import { TicketManager } from "../../managers/ticket/TicketManager";
+import { GuildTicketManager } from "../../managers";
 import { REST } from "../../rest";
 import { APIGuildTicket, APILogMessage, Optional } from "../../types";
-import { Guild } from "../guild/Guild";
+import { Guild } from "../";
 export declare class GuildTicket implements APIGuildTicket {
     _id: string;
     guild_id: string;
@@ -17,7 +17,7 @@ export declare class GuildTicket implements APIGuildTicket {
     updatedAt: Date;
     readonly rest: REST;
     readonly guild: Guild;
-    readonly manager: TicketManager;
+    readonly manager: GuildTicketManager;
     constructor(data: APIGuildTicket, manager: any);
     fetch(): Promise<GuildTicket>;
     setCustomerRating(rating: number): Promise<GuildTicket>;

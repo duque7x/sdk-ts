@@ -46,3 +46,9 @@ export interface APIGuildMatch {
     _id: string;
     mvps: [];
 }
+export declare enum GuildMatchChannelsType {
+    CreationChannel = "creation_channel"
+}
+export declare enum GuildMatchMessagesType {
+    CreationMessage = "creation_message"
+}

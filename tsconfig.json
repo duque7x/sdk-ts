@@ -14,6 +14,14 @@
     "pretty": true,
     "newLine": "lf",
     "downlevelIteration": false,
+    "paths": {
+      "#managers": [
+        "./src/managers/index.ts"
+      ],
+      "#structures": [
+        "./src/structures/index.ts"
+      ]
+    }
   },
   "include": [
     "src",
