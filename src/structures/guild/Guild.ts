@@ -1,10 +1,15 @@
-import { GuildPermissionManager } from "../../managers/permission/GuildPermissionManager";
-import { BufferManager } from "../../managers/buffer/BufferManager";
-import { GuildMatchManager } from "../../managers/match/GuildMatchManager";
-import { VipMemberManager } from "../../managers/vipmember/VipMemberManager";
+import {
+  BufferManager,
+  GuildMatchManager,
+  GuildPermissionManager,
+  GuildTicketManager,
+  GuildUserManager,
+  LogManager,
+  VipMemberManager,
+} from "../../managers";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { APIGuildChannel, APIGuildGroupedChannel, Daily, Optional } from "../../types/api";
+import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
 import {
   APIGuild,
   DailyCategories,
@@ -15,14 +20,7 @@ import {
   GuildStatus,
   GuildTicketConfiguration,
 } from "../../types/api/APIGuild";
-import { APIGuildEmoji } from "../../types/api/APIGuildEmoji";
-import { APIGuildPermissions } from "../../types/api/APIGuildPermissions";
-import { APIGuildRole } from "../../types/api/APIGuildRole";
 import { Assertion } from "../../utils/Assertion";
-import { GuildUserManager } from "../../managers/user/GuildUserManager";
-import { GuildTicketManager } from "../../managers";
-import LogManager from "../../managers/logs/LogManager";
-
 export class Guild {
   /** The data of this guild */
   data: APIGuild;
@@ -82,6 +80,8 @@ export class Guild {
   users: GuildUserManager;
 
   logEntries: LogManager;
+
+  shop: APIGuildShop;
   /**
    * The guild structure
    * @param data The guild's data
@@ -94,15 +94,16 @@ export class Guild {
     this.id = data?.id;
     this.client_key = data?.client_key;
 
+    this.daily_categories = data?.daily_categories;
+    this.permissions = data?.permissions;
+    this.modes = data?.modes;
+    this.prices = data?.prices;
+    this.scores = data?.scores;
     this.prefix = data?.prefix;
     this.status = data?.status;
     this.tickets_configuration = data?.tickets_configuration;
-    this.permissions = data?.permissions;
-    this.daily_categories = data?.daily_categories;
-    this.scores = data?.scores;
-    this.modes = data?.modes;
-    this.prices = data?.prices;
     this.channels = data?.channels;
+    this.shop = data?.shop;
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();

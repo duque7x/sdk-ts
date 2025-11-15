@@ -4,7 +4,7 @@ import { Optional } from "../../types";
 import { APILogEntry } from "../../types/api/APILogEntry";
 import { BaseManager } from "../base";
 
-export default class extends BaseManager<APILogEntry> {
+export class LogManager extends BaseManager<APILogEntry> {
   constructor(guild: Guild) {
     super(guild);
 

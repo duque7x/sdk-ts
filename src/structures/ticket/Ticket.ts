@@ -1,7 +1,7 @@
-import { TicketManager } from "../../managers/ticket/TicketManager";
+import { GuildTicketManager } from "../../managers";
 import { REST, Routes } from "../../rest";
 import { APIGuildTicket, APILogMessage, LogMessage, Optional } from "../../types";
-import { Guild } from "../guild/Guild";
+import { Guild } from "../";
 
 export class GuildTicket implements APIGuildTicket {
   _id: string;
@@ -21,7 +21,7 @@ export class GuildTicket implements APIGuildTicket {
 
   readonly rest: REST;
   readonly guild: Guild;
-  readonly manager: TicketManager;
+  readonly manager: GuildTicketManager;
 
   constructor(data: APIGuildTicket, manager: any) {
     this.manager = manager;

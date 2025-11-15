@@ -1,16 +1,7 @@
 import { APITicketCategory } from ".";
-import { APIGuildBet } from "./APIGuildBet";
-import { APIGuildBetUser } from "./APIGuildBetUser";
-import { APIGuildEmoji } from "./APIGuildEmoji";
 import { APIGuildGroupedChannel } from "./APIGuildGroupedChannel";
-import { APIGuildMatch } from "./APIGuildMatch";
-import { APIGuildMediator } from "./APIGuildMediator";
 import { APIGuildPermissions } from "./APIGuildPermissions";
-import { APIGuildRole } from "./APIGuildRole";
 import { APIGuildShop } from "./APIGuildShop";
-import { APIGuildTicket } from "./APIGuildTicket";
-import { APIGuildUser } from "./APIGuildUser";
-import { APIMessage } from "./APIMessage";
 
 /** Ticket's configuration */
 export interface GuildTicketConfiguration {
@@ -120,12 +111,4 @@ export enum GuildChannelsType {
   UserLogs = "user_logs",
 
   ManagingLogs = "managing_logs",
-}
-
-export enum GuildMatchChannelsType {
-  CreationChannel = "creation_channel",
-}
-
-export enum GuildMatchMessagesType {
-  CreationMessage = "creation_message",
 }

@@ -9,7 +9,7 @@ type FecthOptions = {
 type DeleteOptions = {
     ticketId?: string;
 };
-export declare class TicketManager {
+export declare class GuildTicketManager {
     cache: Collection<string, GuildTicket>;
     readonly guild: Guild;
     readonly rest: REST;

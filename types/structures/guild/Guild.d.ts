@@ -3,13 +3,11 @@ import { BufferManager } from "../../managers/buffer/BufferManager";
 import { GuildMatchManager } from "../../managers/match/GuildMatchManager";
 import { VipMemberManager } from "../../managers/vipmember/VipMemberManager";
 import { REST } from "../../rest/REST";
-import { APIGuildGroupedChannel, Daily, GuildBlacklist, Optional } from "../../types/api";
+import { APIGuildGroupedChannel, Daily, Optional } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";
-import { APIGuildEmoji } from "../../types/api/APIGuildEmoji";
 import { APIGuildPermissions } from "../../types/api/APIGuildPermissions";
-import { APIGuildRole } from "../../types/api/APIGuildRole";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
-import { TicketManager } from "../../managers";
+import { GuildTicketManager } from "../../managers";
 import LogManager from "../../managers/logs/LogManager";
 export declare class Guild {
     /** The data of this guild */
@@ -24,6 +22,7 @@ export declare class Guild {
     /** Guild Permissions */
     permissions: APIGuildPermissions;
     /** Guild Ticket */
+    tickets: GuildTicketManager;
     /** Guild Ticket Configuration */
     tickets_configuration: GuildTicketConfiguration;
     /** Guild Daily Categories */
@@ -33,8 +32,6 @@ export declare class Guild {
     /** Guild Status */
     status: GuildStatus;
     channels: APIGuildGroupedChannel[];
-    /** Guild Blacklist */
-    blacklist: GuildBlacklist;
     /** Guild Prefix */
     prefix: string;
     /** Guild Creation Date */
@@ -43,17 +40,12 @@ export declare class Guild {
     updatedAt: Date;
     /** Guild Matches */
     matches: GuildMatchManager;
-    /** Guild Emojis */
-    emojis: APIGuildEmoji[];
-    /** Guild Roles */
-    roles: APIGuildRole[];
     /** Guild Prices Used */
     prices: GuildPrices;
     permissionsManager: GuildPermissionManager;
     buffer: BufferManager;
     vipMembers: VipMemberManager;
     users: GuildUserManager;
-    tickets: TicketManager;
     logEntries: LogManager;
     /**
      * The guild structure

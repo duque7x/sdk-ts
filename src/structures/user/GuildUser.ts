@@ -65,18 +65,18 @@ export class GuildUser implements APIGuildUser {
     this.rest = manager.rest;
 
     this.wins = data?.wins;
-    this.creations = data?.creations;
     this.losses = data?.losses;
-    this.blacklist = data?.blacklist;
-    this.items = data?.items;
-    this.points = data?.points;
     this.mvps = data?.mvps;
-    this.games = data?.games;
-    this.losses = data?.losses;
-    this.original_channels = data?.original_channels;
-    this.accessories = data?.accessories;
-    this.items = data?.items;
+    this.points = data?.points;
+    this.creations = data?.creations;
+    
     this.daily = data?.daily;
+    this.games = data?.games;
+
+    this.blacklist = data?.blacklist;
+    this.accessories = data?.accessories;
+    this.original_channels = data?.original_channels;
+    this.items = data?.items;
     this.profile = data?.profile;
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();

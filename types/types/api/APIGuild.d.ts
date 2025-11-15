@@ -1,14 +1,7 @@
-import { APITicketCategory, GuildBlacklist } from ".";
-import { APIGuildBet } from "./APIGuildBet";
-import { APIGuildBetUser } from "./APIGuildBetUser";
+import { APITicketCategory } from ".";
 import { APIGuildGroupedChannel } from "./APIGuildGroupedChannel";
-import { APIGuildMatch } from "./APIGuildMatch";
-import { APIGuildMediator } from "./APIGuildMediator";
 import { APIGuildPermissions } from "./APIGuildPermissions";
 import { APIGuildShop } from "./APIGuildShop";
-import { APIGuildTicket } from "./APIGuildTicket";
-import { APIGuildUser } from "./APIGuildUser";
-import { APIMessage } from "./APIMessage";
 /** Ticket's configuration */
 export interface GuildTicketConfiguration {
     /** Guild's categories */
@@ -53,13 +46,11 @@ export interface GuildScores {
 export interface APIGuild {
     /** Guild's id */
     id: string;
-    modes: GuildModes;
     /** Guild's client key */
     client_key: string;
+    modes: GuildModes;
     /** Guild Permissions */
     permissions: APIGuildPermissions;
-    /** Guild Ticket */
-    tickets: APIGuildTicket[];
     /** Guild Ticket Configuration */
     tickets_configuration: GuildTicketConfiguration;
     /** Guild Daily Categories */
@@ -72,8 +63,6 @@ export interface APIGuild {
     channels: APIGuildGroupedChannel[];
     /** Guild Categories */
     categories: APIGuildGroupedChannel[];
-    /** Guild Blacklist */
-    blacklist: GuildBlacklist;
     /** Guild Prefix */
     prefix: string;
     /** Guild Prices Used */
@@ -82,18 +71,6 @@ export interface APIGuild {
     createdAt: Date;
     /** Guild Updated Date */
     updatedAt: Date;
-    /** Guild Bets */
-    bets: APIGuildBet[];
-    /** Guild Users */
-    users: APIGuildUser[];
-    /** Guild Bet Users */
-    betUsers: APIGuildBetUser[];
-    /** Guild Matches */
-    matches: APIGuildMatch[];
-    /** Guild Mediators */
-    mediators: APIGuildMediator[];
-    /** Guild Messages */
-    messages: APIMessage[];
     /** Guild Shop */
     shop: APIGuildShop;
 }

@@ -1,12 +1,19 @@
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { Guild } from "../guild/Guild";
-import { APIGuildMatch, MatchSelection } from "../../types/api/APIGuildMatch";
-import { APIPlayer } from "../../types/api/APIPlayer";
-import { APIMessage, BaseMatchModes, BaseMatchStatus, Confirm, Optional } from "../../types/api";
 import { Assertion } from "../../utils/Assertion";
-import { GuildMatchManager } from "../../managers/match/GuildMatchManager";
-import { APIBaseChannel } from "../../types";
+import {
+  APIBaseChannel,
+  APIGuildMatch,
+  APIMessage,
+  APIPlayer,
+  BaseMatchModes,
+  BaseMatchStatus,
+  Confirm,
+  MatchSelection,
+  Optional,
+} from "../../types";
+import { GuildMatchManager } from "../../managers";
+import { Guild } from "../guild/Guild";
 
 export class GuildMatch {
   _id: string;
@@ -76,31 +83,36 @@ export class GuildMatch {
   constructor(data: APIGuildMatch, manager: GuildMatchManager) {
     this._id = data?._id;
     this.guild_id = data?.guild_id;
-    this.selections = data?.selections;
     this.manager = manager;
     this.guild = manager.guild;
     this.rest = manager.rest;
 
     this.challenge = data?.challenge;
+    this.players = data?.players;
+
+    this.messages = data?.messages;
     this.channels = data?.channels;
-    this.teams = data?.teams;
-    this.kickedOut = data?.kickedOut;
-    this.leaders = data?.leaders;
+
     this.type = data?.type;
     this.status = data?.status;
-    this.maximumSize = data?.maximumSize;
-    this.players = data?.players;
+
+    this.mvps = data?.mvps;
     this.winners = data?.winners;
     this.losers = data?.losers;
+    this.maximumSize = data?.maximumSize;
+    this.kickedOut = data?.kickedOut;
+
+    this.confirmed = data?.confirmed;
+
+    this.teams = data?.teams;
+    this.leaders = data?.leaders;
     this.creatorId = data?.creatorId;
     this.roomCreatorId = data?.roomCreatorId;
-    this.confirmed = data?.confirmed;
-    this.mvps = data?.mvps;
+    this.selections = data?.selections;
+
     this.key = "matches";
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
-
-    this.messages = data?.messages;
   }
 
   /**
