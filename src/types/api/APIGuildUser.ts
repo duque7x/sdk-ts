@@ -9,11 +9,14 @@ export interface APIGuildUser {
   /** User's id */
   id: string;
   guild_id: string;
+
   /** User's daily */
   daily: Omit<Daily, "credit">;
+
   profile: Profile;
   /** User's points */
   points: number;
+  
   creations: number;
   /** User's wins */
   wins: number;

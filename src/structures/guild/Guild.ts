@@ -4,7 +4,7 @@ import { GuildMatchManager } from "../../managers/match/GuildMatchManager";
 import { VipMemberManager } from "../../managers/vipmember/VipMemberManager";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { APIGuildChannel, APIGuildGroupedChannel, Daily, GuildBlacklist, Optional } from "../../types/api";
+import { APIGuildChannel, APIGuildGroupedChannel, Daily, Optional } from "../../types/api";
 import {
   APIGuild,
   DailyCategories,
@@ -20,7 +20,7 @@ import { APIGuildPermissions } from "../../types/api/APIGuildPermissions";
 import { APIGuildRole } from "../../types/api/APIGuildRole";
 import { Assertion } from "../../utils/Assertion";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
-import { TicketManager } from "../../managers";
+import { GuildTicketManager } from "../../managers";
 import LogManager from "../../managers/logs/LogManager";
 
 export class Guild {
@@ -42,7 +42,7 @@ export class Guild {
   permissions: APIGuildPermissions;
 
   /** Guild Ticket */
-  //tickets: GuildTicketManager;
+  tickets: GuildTicketManager;
 
   /** Guild Ticket Configuration */
   tickets_configuration: GuildTicketConfiguration;
@@ -58,9 +58,6 @@ export class Guild {
 
   channels: APIGuildGroupedChannel[];
 
-  /** Guild Blacklist */
-  blacklist: GuildBlacklist;
-
   /** Guild Prefix */
   prefix: string;
 
@@ -73,22 +70,17 @@ export class Guild {
   /** Guild Matches */
   matches: GuildMatchManager;
 
-  /** Guild Emojis */
-  emojis: APIGuildEmoji[];
-
-  /** Guild Roles */
-  roles: APIGuildRole[];
   /** Guild Prices Used */
   prices: GuildPrices;
 
   permissionsManager: GuildPermissionManager;
+
   buffer: BufferManager;
 
   vipMembers: VipMemberManager;
 
   users: GuildUserManager;
 
-  tickets: TicketManager;
   logEntries: LogManager;
   /**
    * The guild structure
@@ -120,7 +112,7 @@ export class Guild {
 
     this.users = new GuildUserManager(this);
     this.matches = new GuildMatchManager(this);
-    this.tickets = new TicketManager(this);
+    this.tickets = new GuildTicketManager(this);
     this.vipMembers = new VipMemberManager(this);
     this.logEntries = new LogManager(this);
   }

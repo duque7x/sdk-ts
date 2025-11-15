@@ -12,21 +12,6 @@ export interface APITicketCategory {
   alias: string;
 }
 
-export interface Blacklisted {
-  /** Blacklist's id */
-  id: string;
-
-  /** Blacklist added by */
-  addedBy: string;
-
-  /** Guild Creation Date */
-  createdAt: Date;
-
-  /** Guild Updated Date */
-  updatedAt: Date;
-}
-export type GuildBlacklist = Blacklisted[];
-
 export interface LogMessage {
   /** The message's content */
   content: string | Buffer<any>;
@@ -84,6 +69,8 @@ export type Accessory = {
 
   /** When accessory added */
   when: Date;
+  createdAt: Date;
+  updatedAt: Date;
 
   /** If accessory has expired */
   expired: boolean;

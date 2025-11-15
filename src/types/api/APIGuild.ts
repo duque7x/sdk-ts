@@ -1,4 +1,4 @@
-import { APITicketCategory, GuildBlacklist } from ".";
+import { APITicketCategory } from ".";
 import { APIGuildBet } from "./APIGuildBet";
 import { APIGuildBetUser } from "./APIGuildBetUser";
 import { APIGuildEmoji } from "./APIGuildEmoji";
@@ -62,15 +62,13 @@ export interface GuildScores {
 export interface APIGuild {
   /** Guild's id */
   id: string;
-  modes: GuildModes;
   /** Guild's client key */
   client_key: string;
 
+  modes: GuildModes;
+
   /** Guild Permissions */
   permissions: APIGuildPermissions;
-
-  /** Guild Ticket */
-  tickets: APIGuildTicket[];
 
   /** Guild Ticket Configuration */
   tickets_configuration: GuildTicketConfiguration;
@@ -90,9 +88,6 @@ export interface APIGuild {
   /** Guild Categories */
   categories: APIGuildGroupedChannel[];
 
-  /** Guild Blacklist */
-  blacklist: GuildBlacklist;
-
   /** Guild Prefix */
   prefix: string;
 
@@ -104,24 +99,6 @@ export interface APIGuild {
 
   /** Guild Updated Date */
   updatedAt: Date;
-
-  /** Guild Bets */
-  bets: APIGuildBet[];
-
-  /** Guild Users */
-  users: APIGuildUser[];
-
-  /** Guild Bet Users */
-  betUsers: APIGuildBetUser[];
-
-  /** Guild Matches */
-  matches: APIGuildMatch[];
-
-  /** Guild Mediators */
-  mediators: APIGuildMediator[];
-
-  /** Guild Messages */
-  messages: APIMessage[];
 
   /** Guild Shop */
   shop: APIGuildShop;

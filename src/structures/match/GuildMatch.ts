@@ -82,6 +82,7 @@ export class GuildMatch {
     this.rest = manager.rest;
 
     this.challenge = data?.challenge;
+    this.channels = data?.channels;
     this.teams = data?.teams;
     this.kickedOut = data?.kickedOut;
     this.leaders = data?.leaders;

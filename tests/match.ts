@@ -11,9 +11,15 @@ client.init().then(async (c) => {
         id: "Dqueu",
       },
     ],
+    channels: [
+      {
+        id: "duque",
+        type: "wefewfwf",
+      },
+    ],
   })) as GuildMatch;
 
- /*  await match.messages.create({
+  /*  await match.messages.create({
     content: "duque",
     type: "duque6",
   });
@@ -21,7 +27,7 @@ client.init().then(async (c) => {
     content: "cristi",
     type: "2",
   }); */
- /*  console.log({ messages: match.messages.cache }); */
+  /*  console.log({ messages: match.messages.cache }); */
 
- match.setStatus("on").then(console.log)
+  match.setStatus("on").then(console.log);
 });
