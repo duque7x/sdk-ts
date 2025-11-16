@@ -111,4 +111,9 @@ export enum GuildChannelsType {
   UserLogs = "user_logs",
 
   ManagingLogs = "managing_logs",
+
+  NormalQueue = "normal_queue",
+  ChallengeQueue = "challenge_queue",
+  MatchTextChannelParent = "match_text_channel_parent",
+  VoiceChannelMatchCreation = "voice_channel_match_creation",
 }

@@ -1,6 +1,6 @@
 import { REST } from "../../rest/REST";
 import { APIBaseChannel, APIGuildMatch, APIMessage, APIPlayer, BaseMatchModes, BaseMatchStatus, Confirm, MatchSelection, Optional } from "../../types";
-import { GuildMatchManager } from "#managers";
+import { GuildMatchManager } from "../../managers";
 import { Guild } from "../guild/Guild";
 export declare class GuildMatch {
     _id: string;

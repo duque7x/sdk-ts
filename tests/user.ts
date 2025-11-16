@@ -1,19 +1,19 @@
 import client from ".";
-import { Guild, GuildMatch, MatchSelection } from "../src";
+import { APIGuildUser, Guild, GuildMatch, MatchSelection } from "../src";
 
 client.init().then(async (c) => {
- /*  console.log({
+  /*  console.log({
     c1: client.guilds.cache,
     c2: c.guilds.cache,
   }) */
-  const guild = c.guilds.cache.at(0)!;
-  const users = guild?.users.cache;
-  const user = guild.users.cache.get("877598927149490186");
-  await user?.update({
+  const guild = c.guilds.cache.get("1336809872884371587")!;
 
-    profile: {
-      bio: "Duqueeeeeeuwuerquweqwe"
-    }
-   });
+  const users = guild.users.cache.toArray().slice(0, 10);
 
+  const coi = users.map((u) => {
+    u.games = 100;
+    u.points = 100000;
+    return u.toJSON() as APIGuildUser;
+  });
+  await guild.users.updateMany(...coi);
 });

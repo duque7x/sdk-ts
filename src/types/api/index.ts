@@ -177,6 +177,7 @@ export * from "./APIGuildUser";
 export * from "./APILogEntry";
 export * from "./APILogMessage";
 export * from "./APIMessage";
+export * from "./APIMinesGame";
 export * from "./APIPlayer";
 export * from "./APIProduct";
 export * from "./APIVipMember";

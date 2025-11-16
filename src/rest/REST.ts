@@ -11,6 +11,7 @@ import { Collection } from "../structures/Collection";
 import { GuildMatch } from "../structures/match/GuildMatch";
 import { GuildUser } from "../structures/user/GuildUser";
 import { RestEvents, RequestOptions } from "../types/RestTypes";
+import { MinesGameManager } from "../managers";
 
 const Reset = "\x1b[0m";
 const FgGreen = "\x1b[32m";
@@ -18,6 +19,10 @@ const FgRed = "\x1b[31m";
 const FgBlue = "\x1b[34m";
 const FgCyan = "\x1b[36m";
 
+interface ClientOptions {
+  clientKey: string;
+  authKey: string;
+}
 /**
  * The main class of this package
  */
@@ -25,10 +30,12 @@ export class REST extends EventEmitter {
   /**
    * The unique key for client
    */
-  key: string;
+  clientKey: string;
+  authKey: string;
 
   /** The guild manager */
   guilds: GuildManager;
+  minesGames: MinesGameManager;
   users: Collection<string, GuildUser>;
   matches: Collection<string, GuildMatch>;
 
@@ -36,28 +43,23 @@ export class REST extends EventEmitter {
    *
    * @param key The unique key for he client
    */
-  constructor(key?: string) {
+  constructor(options: ClientOptions) {
     super({ captureRejections: true });
 
-    this.key = key ?? "";
+    this.clientKey = options.clientKey ?? "";
+    this.authKey = options.authKey ?? "";
     this.guilds = new GuildManager(this);
+    this.minesGames = new MinesGameManager(this);
     this.users = new Collection("rest:users");
     this.matches = new Collection("rest:matches");
 
-    this.setMaxListeners(999)
-  }
-  /**
-   * Set the api key
-   * @param key The unique key of the client
-   */
-  setKey(key: string) {
-    this.key = key;
+    this.setMaxListeners(999);
   }
 
   /** Initialize the caching sistem */
   async init() {
-    if (!this.key) throw new Error("Key is necessary");
-    await Promise.all([this.guilds.fetch()]);
+    if (!this.clientKey || !this.authKey) throw new Error("Key is necessary");
+    await Promise.all([this.guilds.fetch(), this.minesGames.fetch()]);
     return this;
   }
   /**
@@ -77,15 +79,15 @@ export class REST extends EventEmitter {
   async request<Expecting, Payload>(options: RequestOptions<Payload>) {
     let { method, url, payload } = options;
     Assertion.assertString(method);
-    Assertion.assertString(this.key);
+    Assertion.assertString(this.clientKey);
     Assertion.assertString(url);
 
     method = method.toUpperCase();
     url = Routes.base + url;
 
     const headers = new Headers();
-    headers.append("authorization", process.env.AUTH);
-    headers.append("client_key", this.key);
+    headers.append("authorization", this.authKey);
+    headers.append("client_key", this.clientKey);
     headers.append("Content-Type", "application/json");
 
     const before = Date.now();

@@ -74,7 +74,7 @@ export declare class GuildUser implements APIGuildUser {
         type?: "add" | "remove";
     }): Promise<this>;
     delete(): Promise<boolean>;
-    toJSON(): APIGuildUser;
+    toJSON(): Optional<APIGuildUser>;
 }
 export interface UserAddOptions extends APIGuildUser {
     coins: number;

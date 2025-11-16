@@ -7,4 +7,5 @@ export * from "./permission/GuildPermissionManager";
 export * from "./ticket/TicketManager";
 export * from "./user/GuildUserManager";
 export * from "./vipmember/VipMemberManager";
+export * from "./minesgame/MinesGameManager";
 export * from "./base";

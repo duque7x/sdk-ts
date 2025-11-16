@@ -1,6 +1,6 @@
 {
   "name": "@duque.edits/sdk",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index",
   "types": "./types/index.d.ts",
   "typings": "./types/index.d.ts",
@@ -17,15 +17,12 @@
     "dist",
     "types"
   ],
-  "imports": {
-    "#managers": "./dist/managers/index.js",
-    "#structures": "./dist/structures/index.js"
-  },
+ 
   "scripts": {
-    "test": "ts-node tests/index.ts",
-    "match": "ts-node tests/match.ts",
-    "guild": "ts-node tests/guild.ts",
-    "user": "ts-node tests/user.ts"
+    "test": "ts-node --transpile-only tests/index.ts",
+    "match": "ts-node --transpile-only tests/match.ts",
+    "guild": "ts-node --transpile-only tests/guild.ts",
+    "user": "ts-node --transpile-only  tests/user.ts"
   },
   "author": "Duque Edits jedits077@gmail.com",
   "license": "ISC",

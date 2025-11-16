@@ -1,4 +1,4 @@
-import { BufferManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "#managers";
+import { BufferManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "../../managers";
 import { REST } from "../../rest/REST";
 import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";

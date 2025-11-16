@@ -69,7 +69,7 @@ export class GuildUser implements APIGuildUser {
     this.mvps = data?.mvps;
     this.points = data?.points;
     this.creations = data?.creations;
-    
+
     this.daily = data?.daily;
     this.games = data?.games;
 
@@ -184,7 +184,6 @@ export class GuildUser implements APIGuildUser {
     const numericFields = ["coins", "wins", "points", "losses", "mvps", "games"] as const;
     const arrayFields = ["items", "original_channels"] as const;
     if (data?.type === "add" || data?.type === "remove") {
-      console.log({ type: data.type });
       for (const key in data) {
         if (key === "type") continue;
 
@@ -193,7 +192,7 @@ export class GuildUser implements APIGuildUser {
         if (numericFields.includes(key as any)) {
           const current = this[key as keyof typeof this] as number;
           const num = value as number;
-          payload[key] = Math.max(0, data?.type === "add" ? current + num : num - current);
+          payload[key] = Math.max(0, data?.type === "add" ? current + num : current - num);
         } else if (key === "blacklist") {
           payload["blacklist"] = value;
         } else if (key === "profile") {
@@ -257,10 +256,13 @@ export class GuildUser implements APIGuildUser {
 
     return response;
   }
-  toJSON(): APIGuildUser {
-    let json: { [K in keyof GuildUser]: GuildUser[K] };
+  toJSON(): Optional<APIGuildUser> {
+    let json: { [K in keyof GuildUser]?: GuildUser[K] } = {};
 
     for (const [key, value] of Object.entries(this)) {
+      const exclude = ["rest", "guilds", "manager"];
+      if (exclude.includes(key)) continue;
+
       if (typeof value !== "function") {
         (json as any)[key] = value;
       }

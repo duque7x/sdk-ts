@@ -12,7 +12,7 @@ import {
   MatchSelection,
   Optional,
 } from "../../types";
-import { GuildMatchManager } from "#managers";
+import { GuildMatchManager } from "../../managers";
 import { Guild } from "../guild/Guild";
 
 export class GuildMatch {

@@ -43,12 +43,12 @@ export class GuildUserManager extends BaseManager<GuildUser> {
     }
     return this.cache;
   }
-  async updateMany(users: Optional<APIGuildUser[]> | Optional<GuildUser[]>): Promise<Collection<string, GuildUser>> {
+  async updateMany(...users: Optional<APIGuildUser>[]): Promise<Collection<string, GuildUser>> {
     const route = this.base_url;
-    const response = await this.rest.request<APIGuildUser[], APIGuildUser[]>({
+    const response = await this.rest.request<APIGuildUser[], { users: Optional<APIGuildUser>[] }>({
       method: "PATCH",
       url: route,
-      payload: users,
+      payload: { users },
     });
 
     for (const userData of response) {
@@ -84,12 +84,14 @@ export class GuildUserManager extends BaseManager<GuildUser> {
     if (!data) return this.cache;
     if (Array.isArray(data)) {
       for (let _user of data) {
+        if (!_user.id) return;
         const user = new GuildUser(_user, this);
         this.cache.set(user.id, user);
         this.rest.users.set(user.id, user);
       }
       return this.cache;
     } else {
+      if (!data.id) return;
       const user = new GuildUser(data, this);
       this.cache.set(user.id, user);
       this.rest.users.set(user.id, user);
