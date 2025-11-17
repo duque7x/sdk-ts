@@ -1,8 +1,8 @@
 import { APIGuildTicket } from "../types";
 
 export const Routes = {
- // base: "http://localhost:80/api/v1",
- base: "https://dpqd.shardweb.app/api/v1",
+  // base: ,
+  base:  "https://dpqd.shardweb.app/api/v1",
 
   field: (field: string) => `/${field}`,
   fields: (...fields: string[]) => `${fields.join("/")}`,
