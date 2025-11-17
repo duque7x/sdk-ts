@@ -181,7 +181,7 @@ export class GuildUser implements APIGuildUser {
     const route = Routes.guilds.users.get(this.manager.guild.id, this.id);
     let payload: Record<string, any> = {};
 
-    const numericFields = ["coins", "wins", "points", "losses", "mvps", "games"] as const;
+    const numericFields = ["wins", "points", "losses", "mvps", "games", "creations"] as const;
     const arrayFields = ["items", "original_channels"] as const;
     if (data?.type === "add" || data?.type === "remove") {
       for (const key in data) {

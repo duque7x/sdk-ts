@@ -1,6 +1,6 @@
 {
   "name": "@duque.edits/sdk",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "dist/index",
   "types": "./types/index.d.ts",
   "typings": "./types/index.d.ts",
@@ -17,7 +17,6 @@
     "dist",
     "types"
   ],
- 
   "scripts": {
     "test": "ts-node --transpile-only tests/index.ts",
     "match": "ts-node --transpile-only tests/match.ts",
