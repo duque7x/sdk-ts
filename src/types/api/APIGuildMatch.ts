@@ -64,6 +64,7 @@ export interface APIGuildMatch {
 }
 export enum GuildMatchChannelsType {
   CreationChannel = "creation_channel",
+  TextChannel = "text_channel",
 }
 
 export enum GuildMatchMessagesType {
