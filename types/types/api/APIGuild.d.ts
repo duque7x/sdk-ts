@@ -1,4 +1,4 @@
-import { APITicketCategory } from ".";
+import { APICode, APIGuildAdvert, APITicketCategory } from ".";
 import { APIGuildGroupedChannel } from "./APIGuildGroupedChannel";
 import { APIGuildPermissions } from "./APIGuildPermissions";
 import { APIGuildShop } from "./APIGuildShop";
@@ -73,6 +73,9 @@ export interface APIGuild {
     updatedAt: Date;
     /** Guild Shop */
     shop: APIGuildShop;
+    adverts: APIGuildAdvert[];
+    max_advert_per_user: number;
+    codes: APICode[];
 }
 export declare enum GuildChannelsType {
     DailyRank = "daily_rank",

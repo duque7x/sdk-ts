@@ -1,7 +1,7 @@
 import { APIGuildTicket } from "../types";
 
 export const Routes = {
-  // base: ,
+  //base: "http://localhost:80/api/v1",
   base:  "https://dpqd.shardweb.app/api/v1",
 
   field: (field: string) => `/${field}`,
@@ -27,7 +27,8 @@ export const Routes = {
       delete: (guildId: string, userId: string) => `/guilds/${guildId}/users/${userId}`,
       deleteAll: (guildId: string) => `/guilds/${guildId}/users`,
 
-      resource: (guildId: string, userId: string, resource: string) => `/guilds/${guildId}/users/${userId}/${resource}`,
+      resource: (guildId: string, userId: string, ...resource: string[]) =>
+        `/guilds/${guildId}/users/${userId}/${resource.join("/")}`,
     },
 
     betUsers: {

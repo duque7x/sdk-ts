@@ -12,6 +12,7 @@ import { GuildMatch } from "../structures/match/GuildMatch";
 import { GuildUser } from "../structures/user/GuildUser";
 import { RestEvents, RequestOptions } from "../types/RestTypes";
 import { MinesGameManager } from "../managers";
+import { StatusResponse } from "../types";
 
 const Reset = "\x1b[0m";
 const FgGreen = "\x1b[32m";
@@ -63,15 +64,6 @@ export class REST extends EventEmitter {
     return this;
   }
   /**
-   * Ping the api
-   */
-  async ping() {
-    return this.request({
-      url: "/status",
-      method: "get",
-    });
-  }
-  /**
    * Request Data from a certain url
    * @param options
    * @returns
@@ -85,19 +77,19 @@ export class REST extends EventEmitter {
     method = method.toUpperCase();
     url = Routes.base + url;
 
-    const headers = new Headers();
-    headers.append("authorization", this.authKey);
-    headers.append("client_key", this.clientKey);
-    headers.append("Content-Type", "application/json");
+      const headers = new Headers();
+      headers.append("authorization", this.authKey);
+      headers.append("client_key", this.clientKey);
+      headers.append("Content-Type", "application/json");
 
-    const before = Date.now();
-    this.emit("debug", [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n"));
-    const body = { ...payload };
-    const res = await request(url, {
-      method,
-      headers,
-      body: JSON.stringify(body),
-    });
+      const before = Date.now();
+      this.emit("debug", [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n"));
+      const body = { ...payload };
+      const res = await request(url, {
+        method,
+        headers,
+        body: JSON.stringify(body),
+      });
     const responseBody = await res.body.json();
     const { data, message } = responseBody as Record<string, unknown>;
     const now = new Date().getTime();
@@ -113,7 +105,9 @@ export class REST extends EventEmitter {
 
     return data as Expecting;
   }
-
+  async getStatus() {
+    return await this.request<StatusResponse, {}>({ method: "GET", url: "/status" });
+  }
   override emit<K extends keyof RestEvents>(
     event: K,
     ...args: RestEvents[K] // tuple type is spread automatically

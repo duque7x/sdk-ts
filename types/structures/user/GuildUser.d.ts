@@ -1,5 +1,5 @@
 import { REST } from "../../rest/REST";
-import { Accessory, Daily, Items, Optional, OriginalChannels } from "../../types/api";
+import { Accessory, APIAdvert, Daily, Items, Optional, OriginalChannels } from "../../types/api";
 import { APIGuildUser, Profile } from "../../types/api/APIGuildUser";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
 export declare class GuildUser implements APIGuildUser {
@@ -28,6 +28,7 @@ export declare class GuildUser implements APIGuildUser {
     creations: number;
     /** User's items */
     items: Items;
+    adverts: APIAdvert[];
     /** Creation Date */
     createdAt: Date;
     /** Updated Date */
@@ -64,7 +65,10 @@ export declare class GuildUser implements APIGuildUser {
      */
     setBlacklist(value: boolean): Promise<this>;
     reset(): Promise<this>;
+    updateProfile(data: Optional<Profile>): Promise<this>;
     _updateInternals(data: Optional<APIGuildUser>): this;
+    addAdvert(data: Optional<Omit<APIAdvert, "_id">>): Promise<GuildUser>;
+    removeAdvert(advertId?: string): Promise<GuildUser>;
     /**
      * Update certain property
      * @param data The new data to update with

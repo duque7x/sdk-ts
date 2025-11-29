@@ -1,7 +1,11 @@
-export interface APIGuildPermissions {
-  manage_bot: string[];
-  manage_rooms: string[];
-  manage_scores: string[];
+export interface Permission {
+  type: string;
 
-  manage_matches: string[];
+  ids: string[];
+}
+
+export type APIGuildPermissions = Permission[];
+
+export enum GuildPermissionsTypes {
+  ManageBot = "manage_bot",
 }

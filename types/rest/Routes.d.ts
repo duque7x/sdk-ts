@@ -18,7 +18,7 @@ export declare const Routes: {
             get: (guildId: string, userId: string) => string;
             delete: (guildId: string, userId: string) => string;
             deleteAll: (guildId: string) => string;
-            resource: (guildId: string, userId: string, resource: string) => string;
+            resource: (guildId: string, userId: string, ...resource: string[]) => string;
         };
         betUsers: {
             getAll: (guildId: string) => string;

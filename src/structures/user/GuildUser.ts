@@ -1,6 +1,6 @@
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { Accessory, Daily, Items, Optional, OriginalChannel, OriginalChannels } from "../../types/api";
+import { Accessory, APIAdvert, Daily, Items, Optional, OriginalChannel, OriginalChannels } from "../../types/api";
 import { APIGuildUser, Profile } from "../../types/api/APIGuildUser";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
 
@@ -39,6 +39,7 @@ export class GuildUser implements APIGuildUser {
   creations: number;
   /** User's items */
   items: Items;
+  adverts: APIAdvert[];
 
   /** Creation Date */
   createdAt: Date;
@@ -74,6 +75,7 @@ export class GuildUser implements APIGuildUser {
     this.games = data?.games;
 
     this.blacklist = data?.blacklist;
+
     this.accessories = data?.accessories;
     this.original_channels = data?.original_channels;
     this.items = data?.items;
@@ -81,6 +83,22 @@ export class GuildUser implements APIGuildUser {
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
+
+    this.adverts = [];
+    for (let _adv of data?.adverts || []) {
+      this.adverts.push({
+        _id: _adv._id,
+        admin_id: _adv.admin_id,
+        role_id: _adv.role_id,
+        reason: _adv.reason,
+        points_removed: _adv.points_removed,
+        proof: _adv.proof,
+        proof_ext: _adv.proof_ext,
+
+        createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+        updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+      });
+    }
   }
   /** String representation of this user */
   toString() {
@@ -156,11 +174,48 @@ export class GuildUser implements APIGuildUser {
     this._updateInternals(response);
     return this;
   }
+  async updateProfile(data: Optional<Profile>) {
+    const _data: { profile: Profile } = {
+      profile: {
+        avatarUrl: data.avatarUrl || this.profile.avatarUrl || "",
+        bannerUrl: data.bannerUrl || this.profile.bannerUrl || "",
+        bio: data.bio || this.profile.bio || "",
+        name: data.name || this.profile.name || "",
+      },
+    };
+    const route = Routes.guilds.users.update(this.manager.guild.id, this.id);
+    const response = await this.rest.request<APIGuildUser, {}>({
+      method: "patch",
+      url: route,
+      payload: _data,
+    });
+
+    this._updateInternals(response);
+    return this;
+  }
   _updateInternals(data: Optional<APIGuildUser>) {
     for (let key in data) {
       if (key === "id" || key === "createdAt") continue;
       if (key in this) {
         (this as any)[key] = data[key as keyof APIGuildUser];
+      }
+      if (key === "adverts") {
+        this.adverts = [];
+
+        for (let _adv of data.adverts) {
+          this.adverts.push({
+            _id: _adv._id,
+            admin_id: _adv.admin_id,
+            role_id: _adv.role_id,
+            reason: _adv.reason,
+            points_removed: _adv.points_removed,
+            proof: _adv.proof,
+            proof_ext: _adv.proof_ext,
+
+            createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+            updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+          });
+        }
       }
     }
 
@@ -168,7 +223,26 @@ export class GuildUser implements APIGuildUser {
     this.createdAt = new Date(data.createdAt);
 
     this.manager.set(this);
+    this.rest.emit("userUpdate", this);
     return this;
+  }
+
+  async addAdvert(data: Optional<Omit<APIAdvert, "_id">>): Promise<GuildUser> {
+    const route = Routes.guilds.users.resource(this.manager.guild.id, this.id, "adverts");
+    const payload = data;
+    const response = await this.rest.request<APIGuildUser, typeof payload>({ method: "POST", url: route, payload });
+    return this._updateInternals(response);
+  }
+  async removeAdvert(advertId?: string): Promise<GuildUser> {
+    let advs = this.adverts;
+
+    if (advertId) advs = advs.filter((a) => a._id !== advertId);
+    else advs.pop();
+
+    const payload = { adverts: advs };
+    const route = Routes.guilds.users.update(this.manager.guild.id, this.id);
+    const response = await this.rest.request<APIGuildUser, typeof payload>({ method: "PATCH", url: route, payload });
+    return this._updateInternals(response);
   }
   /**
    * Update certain property
@@ -230,17 +304,7 @@ export class GuildUser implements APIGuildUser {
       url: route,
       payload,
     });
-    for (const k in response) {
-      if (k === "id") continue;
-      if (Object.hasOwn(this, k)) {
-        (this as any)[k] = response[k as keyof APIGuildUser];
-      }
-    }
-    this.updatedAt = response?.updatedAt ? new Date(response?.updatedAt) : new Date();
-    this.createdAt = response?.createdAt ? new Date(response?.createdAt) : new Date();
-
-    this.rest.users.set(this.id, this);
-    this.manager.cache.set(this.id, this);
+    this._updateInternals(response);
     return this;
   }
 

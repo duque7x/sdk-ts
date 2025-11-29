@@ -123,11 +123,29 @@ export declare enum STATES {
     SHUTTED = "shutted",
     WAITING = "waiting"
 }
+export interface StatusResponse {
+    status: "ok" | "error";
+    services: {
+        fastify: boolean;
+        mongo: {
+            ok: boolean;
+            latency: number;
+        };
+        redis: {
+            ok: boolean;
+            latency: number;
+        };
+    };
+    timestamp: string;
+}
+export * from "./APIAdvert";
 export * from "./APIBaseChannel";
 export * from "./APIBetChannel";
 export * from "./APIBetMessage";
+export * from "./APICode";
 export * from "./APIGiveaway";
 export * from "./APIGuild";
+export * from "./APIGuildAdvert";
 export * from "./APIGuildBet";
 export * from "./APIGuildBetUser";
 export * from "./APIGuildChannel";

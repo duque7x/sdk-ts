@@ -1,6 +1,6 @@
 import { Routes } from "../../rest/Routes";
 import { Guild } from "../../structures/guild/Guild";
-import { APIGuild, APIGuildPermissions } from "../../types";
+import { APIGuild, APIGuildPermissions, GuildPermissionsTypes } from "../../types";
 import { BaseManager } from "../base";
 
 export class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
@@ -12,12 +12,15 @@ export class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
     this.base_url = Routes.guilds.resource(guild.id, "permissions");
   }
 
-  async addRole(permissionId: keyof APIGuildPermissions, roleId: string) {
-    const perm = this.guild.permissions[permissionId];
-    if (perm.includes(roleId)) return this.guild;
+  async addRole(type: GuildPermissionsTypes, roleId: string) {
+    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [roleId], type };
+   // if (perm.ids.includes(roleId)) return this.guild;
 
-    perm.push(roleId);
-    const perms = { ...this.guild.permissions, perm };
+    perm.ids.push(roleId);
+    const perms = { ...this.guild.permissions };
+    let permsIndex = this.guild.permissions.findIndex((p) => p.type === type);
+    perms[permsIndex] = perm;
+
     const payload = { set: perms };
     const response = await this.rest.request<APIGuild, typeof payload>({
       method: "PATCH",
@@ -30,14 +33,15 @@ export class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
 
     return response;
   }
-  async removeRole(permissionId: keyof APIGuildPermissions, roleId: string) {
-    let perm = this.guild.permissions[permissionId];
-    if (!perm.includes(roleId)) return this.guild;
-
-    perm = perm.filter((i) => i !== roleId);
+  async removeRole(type: GuildPermissionsTypes, roleId: string) {
+    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [], type };
+    if (!perm.ids.includes(roleId)) return this.guild;
+    perm.ids = perm.ids.filter((i) => i !== roleId);
 
     let perms = { ...this.guild.permissions };
-    perms[permissionId] = perm;
+    let permsIndex = this.guild.permissions.findIndex((p) => p.type === type);
+    perms[permsIndex] = perm;
+
     const payload = { set: perms };
     const response = await this.rest.request<APIGuild, typeof payload>({
       method: "PATCH",

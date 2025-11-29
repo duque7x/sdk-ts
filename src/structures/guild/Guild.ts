@@ -9,7 +9,15 @@ import {
 } from "../../managers";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
+import {
+  APICode,
+  APIGuildAdvert,
+  APIGuildGroupedChannel,
+  APIGuildPermissions,
+  APIGuildShop,
+  Daily,
+  Optional,
+} from "../../types/api";
 import {
   APIGuild,
   DailyCategories,
@@ -82,6 +90,10 @@ export class Guild {
   logEntries: LogManager;
 
   shop: APIGuildShop;
+
+  adverts: APIGuildAdvert[];
+
+  codes: APICode[];
   /**
    * The guild structure
    * @param data The guild's data
@@ -99,6 +111,7 @@ export class Guild {
     this.modes = data?.modes;
     this.prices = data?.prices;
     this.scores = data?.scores;
+    this.codes = data?.codes;
     this.prefix = data?.prefix;
     this.status = data?.status;
     this.tickets_configuration = data?.tickets_configuration;
@@ -116,6 +129,33 @@ export class Guild {
     this.tickets = new GuildTicketManager(this);
     this.vipMembers = new VipMemberManager(this);
     this.logEntries = new LogManager(this);
+
+    this.adverts = [];
+    for (let _adv of data?.adverts || []) {
+      this.adverts.push({
+        _id: _adv._id,
+        admin_id: _adv.admin_id,
+        points_to_remove: _adv.points_to_remove,
+        role_id: _adv.role_id,
+
+        createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+        updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+      });
+    }
+    this.codes = [];
+    for (let _adv of data?.codes || []) {
+      this.codes.push({
+        _id: _adv._id,
+        admin_id: _adv.admin_id,
+        type: _adv.type,
+        add: _adv.add,
+        code: _adv.code,
+
+        expire: _adv.expire ? new Date(_adv.expire) : new Date(),
+        createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+        updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+      });
+    }
   }
   async getChannel(type: GuildChannelsType): Promise<APIGuildGroupedChannel> {
     const channel = this.channels.find((c) => c.type === type);
@@ -131,7 +171,32 @@ export class Guild {
       this._updateInternals(response);
       return response.channels.find((t) => t.type === type);
     }
-    return;
+  }
+  async createAdvert(data: Optional<APIGuildAdvert>) {
+    this.adverts.push(data as APIGuildAdvert);
+    const route = Routes.guilds.get(this.id);
+    const payload = { adverts: this.adverts };
+    const response = await this.rest.request<APIGuild, typeof payload>({ method: "PATCH", url: route, payload });
+    return this._updateInternals(response);
+  }
+  async removeAdvert(advertId: string) {
+    const route = Routes.guilds.get(this.id);
+    const payload = { adverts: this.adverts.filter((a) => a._id !== advertId) };
+    const response = await this.rest.request<APIGuild, typeof payload>({ method: "PATCH", url: route, payload });
+    return this._updateInternals(response);
+  }
+  async createCode(data: Optional<APICode>) {
+    this.codes.push(data as APICode);
+    const route = Routes.guilds.get(this.id);
+    const payload = { codes: this.codes };
+    const response = await this.rest.request<APIGuild, typeof payload>({ method: "PATCH", url: route, payload });
+    return this._updateInternals(response);
+  }
+  async removeCode(codeId: string) {
+    const route = Routes.guilds.get(this.id);
+    const payload = { codes: this.codes.filter((a) => a._id !== codeId) };
+    const response = await this.rest.request<APIGuild, typeof payload>({ method: "PATCH", url: route, payload });
+    return this._updateInternals(response);
   }
   async addIdToChannel(type: GuildChannelsType, id: string | string[]) {
     const channel = this.channels.find((c) => c.type === type);
@@ -204,6 +269,35 @@ export class Guild {
       if (key === "id" || key === "createdAt") continue;
       if (key in this) {
         (this as any)[key] = data[key as keyof APIGuild];
+      }
+      if (key === "adverts") {
+        this.adverts = [];
+        for (let _adv of data.adverts) {
+          this.adverts.push({
+            _id: _adv._id,
+            admin_id: _adv.admin_id,
+            points_to_remove: _adv.points_to_remove,
+            role_id: _adv.role_id,
+
+            createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+            updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+          });
+        }
+      }
+      if (key === "code") {
+        this.codes = [];
+        for (let _adv of data.codes) {
+          this.codes.push({
+            _id: _adv._id,
+            admin_id: _adv.admin_id,
+            type: _adv.type,
+            add: _adv.add,
+            code: _adv.code,
+            expire: _adv.expire ? new Date(_adv.expire) : new Date(),
+            createdAt: _adv.createdAt ? new Date(_adv.createdAt) : new Date(),
+            updatedAt: _adv.updatedAt ? new Date(_adv.updatedAt) : new Date(),
+          });
+        }
       }
     }
 

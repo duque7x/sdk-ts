@@ -1,6 +1,6 @@
 import { BufferManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "../../managers";
 import { REST } from "../../rest/REST";
-import { APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
+import { APICode, APIGuildAdvert, APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";
 export declare class Guild {
     /** The data of this guild */
@@ -41,6 +41,8 @@ export declare class Guild {
     users: GuildUserManager;
     logEntries: LogManager;
     shop: APIGuildShop;
+    adverts: APIGuildAdvert[];
+    codes: APICode[];
     /**
      * The guild structure
      * @param data The guild's data
@@ -48,6 +50,10 @@ export declare class Guild {
      */
     constructor(data: APIGuild, rest: REST);
     getChannel(type: GuildChannelsType): Promise<APIGuildGroupedChannel>;
+    createAdvert(data: Optional<APIGuildAdvert>): Promise<this>;
+    removeAdvert(advertId: string): Promise<this>;
+    createCode(data: Optional<APICode>): Promise<this>;
+    removeCode(codeId: string): Promise<this>;
     addIdToChannel(type: GuildChannelsType, id: string | string[]): Promise<this>;
     removeIdInChannel(type: GuildChannelsType, id: string): Promise<this>;
     _start(): Promise<this>;

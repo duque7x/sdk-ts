@@ -5,6 +5,7 @@ import { GuildMatch } from "../structures/match/GuildMatch";
 import { GuildUser } from "../structures/user/GuildUser";
 import { RestEvents, RequestOptions } from "../types/RestTypes";
 import { MinesGameManager } from "../managers";
+import { StatusResponse } from "../types";
 interface ClientOptions {
     clientKey: string;
     authKey: string;
@@ -40,6 +41,7 @@ export declare class REST extends EventEmitter {
      * @returns
      */
     request<Expecting, Payload>(options: RequestOptions<Payload>): Promise<Expecting>;
+    getStatus(): Promise<StatusResponse>;
     emit<K extends keyof RestEvents>(event: K, ...args: RestEvents[K]): boolean;
     on<K extends keyof RestEvents>(event: K, listener: (...args: RestEvents[K]) => void): this;
     once<K extends keyof RestEvents>(event: K, listener: (...args: RestEvents[K]) => void): this;

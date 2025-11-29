@@ -1,14 +1,10 @@
 import client from ".";
-import { GuildChannelsType } from "../src";
+import { GuildChannelsType, GuildPermissionsTypes } from "../src";
 
 client.init().then(async (c) => {
   const guild = client.guilds.cache.get("1336809872884371587")!;
 
-  //guild.toggleDailyCategory("credit")
+  await guild.permissionsManager.addRole(GuildPermissionsTypes.ManageBot, "dque");
 
-  //guild.toggleMode("6v6")
-
-  await guild.addIdToChannel(GuildChannelsType.VoiceChannelMatchCreation, "1439220443646132257");
-  const channel = guild.channels[GuildChannelsType.Commands];
-  console.log({ channel });
+  console.log({ perms: guild.permissions.map((c) => ({ ids: c.ids, type: c.type })) });
 });

@@ -1,4 +1,4 @@
-import { Accessory, Daily, Items, OriginalChannels } from ".";
+import { Accessory, APIAdvert, Daily, Items, OriginalChannels } from ".";
 export interface Profile {
   bannerUrl?: string;
   avatarUrl?: string;
@@ -21,6 +21,8 @@ export interface APIGuildUser {
   /** User's wins */
   wins: number;
 
+  adverts: APIAdvert[];
+  
   /** User's mvps */
   mvps: number;
 

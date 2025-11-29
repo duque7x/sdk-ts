@@ -1,4 +1,4 @@
-import { APITicketCategory } from ".";
+import { APICode, APIGuildAdvert, APITicketCategory } from ".";
 import { APIGuildGroupedChannel } from "./APIGuildGroupedChannel";
 import { APIGuildPermissions } from "./APIGuildPermissions";
 import { APIGuildShop } from "./APIGuildShop";
@@ -93,6 +93,12 @@ export interface APIGuild {
 
   /** Guild Shop */
   shop: APIGuildShop;
+
+  adverts: APIGuildAdvert[];
+
+  max_advert_per_user: number;
+
+  codes: APICode[];
 }
 
 export enum GuildChannelsType {
