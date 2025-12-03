@@ -32,10 +32,6 @@ export declare class REST extends EventEmitter {
     /** Initialize the caching sistem */
     init(): Promise<this>;
     /**
-     * Ping the api
-     */
-    ping(): Promise<unknown>;
-    /**
      * Request Data from a certain url
      * @param options
      * @returns

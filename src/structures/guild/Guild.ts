@@ -223,7 +223,32 @@ export class Guild {
 
     return this._updateInternals(response);
   }
+  async setChannelIds(type: GuildChannelsType, ...ids: string[]) {
+    const channel = this.channels.find((c) => c.type === type);
+    if (!ids || ids.length === 0) return; 
 
+    
+    if (!channel) {
+      // create new channel if it doesn't exist
+      this.channels.push({ type, ids });
+    } else {
+      // merge IDs, remove duplicates
+      const chIndex = this.channels.findIndex((ch) => ch.type === type);
+      const mergedIds = [...new Set([...ids])];
+
+      this.channels[chIndex] = { ...channel, ids: mergedIds };
+    }
+
+    const route = Routes.guilds.get(this.id);
+    const payload = { channels: this.channels };
+    const response = await this.rest.request<APIGuild, typeof payload>({
+      method: "PATCH",
+      url: route,
+      payload,
+    });
+
+    return this._updateInternals(response);
+  }
   async removeIdInChannel(type: GuildChannelsType, id: string) {
     const chIndex = this.channels.findIndex((c) => c.type === type);
 

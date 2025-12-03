@@ -1,11 +1,10 @@
-import { Collection, Guild } from "../../structures";
+import { Collection, Guild, LogEntry } from "../../structures";
 import { Optional } from "../../types";
 import { APILogEntry } from "../../types/api/APILogEntry";
 import { BaseManager } from "../base";
-export declare class LogManager extends BaseManager<APILogEntry> {
+export declare class LogManager extends BaseManager<LogEntry> {
     constructor(guild: Guild);
-    fetch(): Promise<APILogEntry[]>;
-    create(data: Optional<APILogEntry>): Promise<APILogEntry>;
-    createMany(data: Optional<APILogEntry>[]): Promise<APILogEntry[]>;
-    set(data: APILogEntry | APILogEntry[]): APILogEntry | Collection<string, APILogEntry>;
+    fetch(): Promise<Collection<string, LogEntry>>;
+    create(data: Optional<APILogEntry>): Promise<LogEntry>;
+    set(data: APILogEntry | APILogEntry[]): LogEntry | Collection<string, LogEntry>;
 }

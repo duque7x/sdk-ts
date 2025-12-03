@@ -1,10 +1,12 @@
 //import { Channel } from "../structures/channel/Channel";
+import { LogEntry } from "../structures";
 import { Collection } from "../structures/Collection";
 //import { GroupedChannel } from "../structures/groupedchannel/GroupedChannel";
 import { Guild } from "../structures/guild/Guild";
 import { GuildMatch } from "../structures/match/GuildMatch";
 //import { GuildTicket } from "../structures/ticket/GuildTicket";
 import { GuildUser } from "../structures/user/GuildUser";
+import { APILogEntry } from "./api";
 
 export interface RequestOptions<Payload> {
   /** The request's method */
@@ -40,8 +42,9 @@ export interface RestEvents {
   userUpdate: [GuildUser];
   usersDelete: [Collection<string, GuildUser>];
 
- // channelCreate: [Channel<any>];
- // channelUpdate: [Channel<any>];
- // channelBulkCreate: [Collection<string, Channel<any>>];
- // channelBulkDelete: [Collection<string, Channel<any>>];
+  logEntryCreate: [LogEntry, Guild];
+  // channelCreate: [Channel<any>];
+  // channelUpdate: [Channel<any>];
+  // channelBulkCreate: [Collection<string, Channel<any>>];
+  // channelBulkDelete: [Collection<string, Channel<any>>];
 }

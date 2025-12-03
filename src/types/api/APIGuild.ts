@@ -23,6 +23,8 @@ export interface GuildStatus {
   logs_queues: "on" | "off";
   logs_users: "on" | "off";
   logs_managing: "on" | "off";
+
+  name_hidden: "on" | "off";
 }
 export interface GuildModes {
   on: string[];

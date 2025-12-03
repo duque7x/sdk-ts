@@ -1,28 +1,29 @@
 import { REST, Routes } from "../../rest";
-import { Collection, Guild } from "../../structures";
+import { Collection, Guild, LogEntry } from "../../structures";
 import { Optional } from "../../types";
 import { APILogEntry } from "../../types/api/APILogEntry";
 import { BaseManager } from "../base";
 
-export class LogManager extends BaseManager<APILogEntry> {
+export class LogManager extends BaseManager<LogEntry> {
   constructor(guild: Guild) {
     super(guild);
 
     this.guild = guild;
     this.rest = guild.rest;
     this.base_url = Routes.fields(Routes.guilds.get(guild.id), "logs");
-    this.cache = new Collection<string, APILogEntry>();
+    this.cache = new Collection<string, LogEntry>();
   }
 
-  async fetch(): Promise<APILogEntry[]> {
+  async fetch(): Promise<Collection<string, LogEntry>> {
     const route = this.base_url;
     const response = await this.rest.request<APILogEntry[], {}>({
       method: "GET",
       url: route,
     });
-    return response;
+
+    return this.set(response) as Collection<string, LogEntry>;
   }
-  async create(data: Optional<APILogEntry>): Promise<APILogEntry> {
+  async create(data: Optional<APILogEntry>): Promise<LogEntry> {
     const route = this.base_url;
     const payload = { ...data };
     const response = await this.rest.request<APILogEntry, typeof payload>({
@@ -30,12 +31,14 @@ export class LogManager extends BaseManager<APILogEntry> {
       url: route,
       payload,
     });
+    const logEntry = this.set(response) as LogEntry;
+    this.cache.set(data._id, logEntry);
+    this.rest.emit("logEntryCreate", logEntry, this.guild);
 
-    this.set(response);
-    return response;
+    return logEntry;
   }
-  async createMany(data: Optional<APILogEntry>[]): Promise<APILogEntry[]> {
-    const route = this.base_url;
+  /* async createMany(data: Optional<APILogEntry>[]): Promise<APILogEntry[]> {
+    const route = Routes.fields(this.base_url, "bulk");
     const payload = { ...data };
     const response = await this.rest.request<APILogEntry[], typeof payload>({
       method: "POST",
@@ -45,17 +48,22 @@ export class LogManager extends BaseManager<APILogEntry> {
 
     this.set(response);
     return response;
-  }
+  } */
   set(data: APILogEntry | APILogEntry[]) {
     if (!data) return this.cache;
     if (Array.isArray(data)) {
+      this.cache.clear();
+
       for (let entry of data) {
-        this.cache.set(entry._id, entry);
+        if (!entry._id) continue;
+        const logEntry = new LogEntry(entry, this);
+        this.cache.set(entry._id, logEntry);
       }
       return this.cache;
     } else {
-      this.cache.set(data._id, data);
-      return data;
+      const logEntry = new LogEntry(data, this);
+      this.cache.set(data._id, logEntry);
+      return logEntry;
     }
   }
 }

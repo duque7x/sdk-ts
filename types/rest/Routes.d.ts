@@ -10,7 +10,7 @@ export declare const Routes: {
         delete: (guildId: string) => string;
         deleteAll: () => string;
         resource: (guildId: string, resource: string) => string;
-        resources: (guildId: string, ...resourcess: string[]) => string;
+        resources: (guildId: string, ...resources: string[]) => string;
         users: {
             create: (guildId: string) => string;
             update: (guildId: string, userId: string) => string;

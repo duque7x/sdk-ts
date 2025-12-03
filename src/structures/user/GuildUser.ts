@@ -179,8 +179,12 @@ export class GuildUser implements APIGuildUser {
       profile: {
         avatarUrl: data.avatarUrl || this.profile.avatarUrl || "",
         bannerUrl: data.bannerUrl || this.profile.bannerUrl || "",
-        bio: data.bio || this.profile.bio || "",
+        bio: data.bio || this.profile.bio || "Melhor da minha aldeia (use !bio para alterar)",
         name: data.name || this.profile.name || "",
+
+        textColor: data.textColor || this.profile.textColor || "#ffffff",
+        primaryColor: data.primaryColor || this.profile.primaryColor || "#272727",
+        secondaryColor: data.secondaryColor || this.profile.secondaryColor || "#151515",
       },
     };
     const route = Routes.guilds.users.update(this.manager.guild.id, this.id);
@@ -256,7 +260,7 @@ export class GuildUser implements APIGuildUser {
     let payload: Record<string, any> = {};
 
     const numericFields = ["wins", "points", "losses", "mvps", "games", "creations"] as const;
-    const arrayFields = ["items", "original_channels"] as const;
+    const arrayFields = ["items", "original_channels", "adverts"] as const;
     if (data?.type === "add" || data?.type === "remove") {
       for (const key in data) {
         if (key === "type") continue;
@@ -264,8 +268,8 @@ export class GuildUser implements APIGuildUser {
         const value = data[key as keyof typeof data];
 
         if (numericFields.includes(key as any)) {
-          const current = this[key as keyof typeof this] as number;
-          const num = value as number;
+          const current = (this[key as keyof typeof this] || 0) as number;
+          const num = (value || 0) as number;
           payload[key] = Math.max(0, data?.type === "add" ? current + num : current - num);
         } else if (key === "blacklist") {
           payload["blacklist"] = value;

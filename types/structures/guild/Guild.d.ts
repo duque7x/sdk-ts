@@ -55,6 +55,7 @@ export declare class Guild {
     createCode(data: Optional<APICode>): Promise<this>;
     removeCode(codeId: string): Promise<this>;
     addIdToChannel(type: GuildChannelsType, id: string | string[]): Promise<this>;
+    setChannelIds(type: GuildChannelsType, ...ids: string[]): Promise<this>;
     removeIdInChannel(type: GuildChannelsType, id: string): Promise<this>;
     _start(): Promise<this>;
     _updateInternals(data: Optional<APIGuild>): this;

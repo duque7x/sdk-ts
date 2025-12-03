@@ -1,3 +1,4 @@
+import { LogEntry } from "../structures";
 import { Collection } from "../structures/Collection";
 import { Guild } from "../structures/guild/Guild";
 import { GuildMatch } from "../structures/match/GuildMatch";
@@ -31,4 +32,5 @@ export interface RestEvents {
     userDelete: [GuildUser];
     userUpdate: [GuildUser];
     usersDelete: [Collection<string, GuildUser>];
+    logEntryCreate: [LogEntry, Guild];
 }

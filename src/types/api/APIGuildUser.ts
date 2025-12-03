@@ -4,6 +4,11 @@ export interface Profile {
   avatarUrl?: string;
   bio?: string;
   name?: string;
+
+
+  textColor?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
 }
 export interface APIGuildUser {
   /** User's id */
