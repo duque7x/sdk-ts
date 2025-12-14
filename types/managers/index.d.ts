@@ -1,3 +1,5 @@
+export * from "./bet/GuildBetManager";
+export * from "./betuser/GuildBetUserManager";
 export * from "./buffer/BufferManager";
 export * from "./guild/GuildManager";
 export * from "./logs/LogManager";

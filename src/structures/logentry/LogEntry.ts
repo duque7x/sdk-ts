@@ -76,7 +76,7 @@ export class LogEntry {
     }
 
     this.updatedAt = new Date();
-    this.manager.cache.set(this._id, this);
+    this.manager.set(this);
     return this;
   }
 }

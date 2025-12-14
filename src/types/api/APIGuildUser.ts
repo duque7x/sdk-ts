@@ -1,10 +1,9 @@
-import { Accessory, APIAdvert, Daily, Items, OriginalChannels } from ".";
+import { Accessory, APIAdvert, Daily, OriginalChannels } from ".";
 export interface Profile {
   bannerUrl?: string;
   avatarUrl?: string;
   bio?: string;
   name?: string;
-
 
   textColor?: string;
   primaryColor?: string;
@@ -21,13 +20,13 @@ export interface APIGuildUser {
   profile: Profile;
   /** User's points */
   points: number;
-  
+
   creations: number;
   /** User's wins */
   wins: number;
 
   adverts: APIAdvert[];
-  
+
   /** User's mvps */
   mvps: number;
 
@@ -45,9 +44,6 @@ export interface APIGuildUser {
 
   /** User's original channels */
   original_channels: OriginalChannels;
-
-  /** User's items */
-  items: Items;
 
   /** Creation Date */
   createdAt: Date;

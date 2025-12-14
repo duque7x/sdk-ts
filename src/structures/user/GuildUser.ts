@@ -1,6 +1,6 @@
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { Accessory, APIAdvert, Daily, Items, Optional, OriginalChannel, OriginalChannels } from "../../types/api";
+import { Accessory, APIAdvert, Daily,  Optional, OriginalChannel, OriginalChannels } from "../../types/api";
 import { APIGuildUser, Profile } from "../../types/api/APIGuildUser";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
 
@@ -38,7 +38,6 @@ export class GuildUser implements APIGuildUser {
   profile: Profile;
   creations: number;
   /** User's items */
-  items: Items;
   adverts: APIAdvert[];
 
   /** Creation Date */
@@ -78,7 +77,6 @@ export class GuildUser implements APIGuildUser {
 
     this.accessories = data?.accessories;
     this.original_channels = data?.original_channels;
-    this.items = data?.items;
     this.profile = data?.profile;
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
@@ -119,29 +117,6 @@ export class GuildUser implements APIGuildUser {
     this.manager.cache.set(user.id, user);
     this.rest.users.set(user.id, user);
     return user;
-  }
-
-  /**
-   * Add a propery
-   * @param key The desired key
-   * @param value The desired value
-   * @returns GuildUser
-   */
-  async add<K extends keyof UserAddOptions, V extends UserAddOptions[K]>(key: K, value: V) {
-    const route = Routes.guilds.users.resource(this.manager.guild.id, this.id, key);
-    const payload = { set: value };
-
-    const resp = await this.rest.request<APIGuildUser, typeof payload>({
-      method: "patch",
-      url: route,
-      payload,
-    });
-
-    (this as any)[key] = resp[key as keyof APIGuildUser];
-
-    this.manager.cache.set(this.id, this);
-    this.rest.users.set(this.id, this);
-    return this;
   }
 
   /**
@@ -260,7 +235,7 @@ export class GuildUser implements APIGuildUser {
     let payload: Record<string, any> = {};
 
     const numericFields = ["wins", "points", "losses", "mvps", "games", "creations"] as const;
-    const arrayFields = ["items", "original_channels", "adverts"] as const;
+    const arrayFields = ["items", "original_channels", "adverts", "accessories"] as const;
     if (data?.type === "add" || data?.type === "remove") {
       for (const key in data) {
         if (key === "type") continue;
@@ -339,10 +314,3 @@ export class GuildUser implements APIGuildUser {
   }
 }
 
-export interface UserAddOptions extends APIGuildUser {
-  coins: number;
-  points: number;
-  wins: number;
-  losses: number;
-  mvps: number;
-}

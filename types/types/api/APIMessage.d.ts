@@ -3,6 +3,7 @@ export interface APIMessage {
     content?: string | object;
     _id?: string;
     id?: string;
+    extension?: string;
     /** Message's type */
     type: string;
     /** Creation Date */

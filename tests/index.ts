@@ -1,5 +1,5 @@
 import { REST } from "../src";
-const client = new REST({ clientKey: "877598927149490186", authKey: "1QImU1DlWWSLeS2PsnZO3gCLKhrPWj7D" });
+const client = new REST({ clientKey: "877598927149490186", authKey: "1QImU1DlWWSLeS2PsnZO3gCLKhrPWj7D", guildId: "1336809872884371587" });
 
 export const colors = {
   Reset: "\x1b[0m",

@@ -16,6 +16,6 @@
     "downlevelIteration": false,
   },
   "include": [
-    "src",
+    "src", "src/managers/betuser/GuildBetUserManager.ts",
   ]
 }

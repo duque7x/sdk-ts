@@ -6,6 +6,8 @@ import { APIGuildShop } from "./APIGuildShop";
 export interface GuildTicketConfiguration {
     /** Guild's categories */
     categories: APITicketCategory[];
+    creationCategory: string;
+    rating_channel_id: string;
 }
 export interface GuildStatus {
     /** Matches status */
@@ -23,15 +25,28 @@ export interface GuildStatus {
     logs_managing: "on" | "off";
     name_hidden: "on" | "off";
 }
+export declare enum GuildStatusEnum {
+    /** Matches status */
+    Matches = "matches",
+    /** Bets status */
+    Bets = "bets",
+    /** Daily Ranking status */
+    DailyRank = "daily_rank",
+    /** Voice Channels for a bet */
+    CreateVoiceChannels = "create_voice_channels",
+    TwoMvps = "two_mvps",
+    RankingName = "ranking_name",
+    LogsQueues = "logs_queues",
+    LogsUsers = "logs_users",
+    LogsManaging = "logs_managing",
+    NameHidden = "name_hidden"
+}
 export interface GuildModes {
     on: string[];
     off: string[];
 }
 export type DailyCategories = "coins" | "credit" | "wins" | "points" | "losses" | "mvps";
-export interface GuildPrices {
-    on: number[];
-    used: number[];
-}
+export type GuildPrices = number[];
 export interface GuildScores {
     /** Win */
     win: number;
@@ -77,6 +92,7 @@ export interface APIGuild {
     adverts: APIGuildAdvert[];
     max_advert_per_user: number;
     codes: APICode[];
+    coin_symbol: string;
 }
 export declare enum GuildChannelsType {
     DailyRank = "daily_rank",
@@ -90,5 +106,9 @@ export declare enum GuildChannelsType {
     NormalQueue = "normal_queue",
     ChallengeQueue = "challenge_queue",
     MatchTextChannelParent = "match_text_channel_parent",
-    VoiceChannelMatchCreation = "voice_channel_match_creation"
+    VoiceChannelMatchCreation = "voice_channel_match_creation",
+    WaitingVC = "waiting_vc",
+    BetMobileCategory = "bet_mobile_category",
+    BetEmulatorCategory = "bet_emulator_category",
+    BetMixCategory = "bet_mix_category"
 }

@@ -3,6 +3,6 @@ import { APIGuild, APIGuildPermissions, GuildPermissionsTypes } from "../../type
 import { BaseManager } from "../base";
 export declare class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
     constructor(guild: Guild);
-    addRole(type: GuildPermissionsTypes, roleId: string): Promise<APIGuild>;
-    removeRole(type: GuildPermissionsTypes, roleId: string): Promise<APIGuild | Guild>;
+    addRole(type: GuildPermissionsTypes, ...ids: string[]): Promise<APIGuild>;
+    removeRole(type: GuildPermissionsTypes, ...ids: string[]): Promise<APIGuild>;
 }

@@ -4,6 +4,8 @@ export interface APIMessage {
 
   _id?: string;
   id?: string;
+  
+  extension?: string;
   /** Message's type */
   type: string;
 

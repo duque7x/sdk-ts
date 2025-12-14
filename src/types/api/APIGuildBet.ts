@@ -19,17 +19,10 @@ export interface APIGuildBet {
   /** The bet's price */
   price: number;
 
-  /** Who has payed the bet */
-  payedBy: APIPlayer[];
-
   /** The bet's players */
   players: APIPlayer[];
 
-  /** An array of team a */
-  teamA: APIPlayer[];
-
-  /** An array of team b */
-  teamB: APIPlayer[];
+  teams: APIPlayer[][];
 
   /** The bet's channel */
   channels: APIBetChannel[];
@@ -38,10 +31,10 @@ export interface APIGuildBet {
   messages: APIMessage[];
 
   /** The id of the winner */
-  winner: string;
+  winners: APIPlayer[];
 
   /** The id of the loser */
-  loser: string;
+  losers: APIPlayer[];
 
   /** The bet's creator id */
   creatorId: string;
@@ -51,12 +44,6 @@ export interface APIGuildBet {
 
   /** The bet's confirmers */
   confirmed: Confirm[];
-
-  /** The bet's embed id */
-  embedMessageId: string;
-
-  /** The bet's logs */
-  logs: Logs;
 
   /** Creation Date */
   createdAt: Date;

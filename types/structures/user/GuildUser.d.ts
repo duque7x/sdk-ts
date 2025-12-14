@@ -1,5 +1,5 @@
 import { REST } from "../../rest/REST";
-import { Accessory, APIAdvert, Daily, Items, Optional, OriginalChannels } from "../../types/api";
+import { Accessory, APIAdvert, Daily, Optional, OriginalChannels } from "../../types/api";
 import { APIGuildUser, Profile } from "../../types/api/APIGuildUser";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
 export declare class GuildUser implements APIGuildUser {
@@ -27,7 +27,6 @@ export declare class GuildUser implements APIGuildUser {
     profile: Profile;
     creations: number;
     /** User's items */
-    items: Items;
     adverts: APIAdvert[];
     /** Creation Date */
     createdAt: Date;
@@ -52,13 +51,6 @@ export declare class GuildUser implements APIGuildUser {
      */
     fetch(): Promise<GuildUser>;
     /**
-     * Add a propery
-     * @param key The desired key
-     * @param value The desired value
-     * @returns GuildUser
-     */
-    add<K extends keyof UserAddOptions, V extends UserAddOptions[K]>(key: K, value: V): Promise<this>;
-    /**
      * Set the user blacklist
      * @param value Value to set to
      * @returns GuildUser
@@ -79,11 +71,4 @@ export declare class GuildUser implements APIGuildUser {
     }): Promise<this>;
     delete(): Promise<boolean>;
     toJSON(): Optional<APIGuildUser>;
-}
-export interface UserAddOptions extends APIGuildUser {
-    coins: number;
-    points: number;
-    wins: number;
-    losses: number;
-    mvps: number;
 }

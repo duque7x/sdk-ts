@@ -36,8 +36,6 @@ export type OriginalChannel = {
     /** Match id */
     matchId: string;
 };
-/** Items */
-export type Items = string[];
 /** Original Channels */
 export type OriginalChannels = OriginalChannel[];
 /** Accessories */

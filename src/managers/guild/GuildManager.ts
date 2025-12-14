@@ -45,6 +45,9 @@ export class GuildManager {
         url: route,
       });
       const guild = new Guild(response, this.rest);
+      await guild._start().then((g) => {
+        this.cache.set(g.id, g);
+      });
       this.cache.set(guild.id, guild);
       return guild as Guild;
     }

@@ -290,9 +290,7 @@ export class GuildMatch {
     }
 
     this.updatedAt = new Date();
-    this.manager.cache.set(this._id, this);
-    this.rest.matches.set(this._id, this);
-    this.guild.buffer.matches.set(this._id, this);
+    this.manager.set(this);
     return this;
   }
 }

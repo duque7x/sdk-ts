@@ -1,8 +1,8 @@
-import { BaseMatchModes, Confirm } from ".";
-import { APIBetChannel } from "./APIBetChannel";
-import { APIMessage } from "./APIMessage";
-import { APIPlayer } from "./APIPlayer";
-export interface APIGuildBet {
+import { GuildBetManager } from "../../managers";
+import { REST } from "../../rest";
+import { APIBetChannel, APIGuildBet, APIMessage, APIPlayer, BaseMatchModes, Confirm, Optional } from "../../types";
+import { Guild } from "../guild/Guild";
+export declare class GuildBet {
     /** The bet's type */
     type: Omit<BaseMatchModes, "5x5" | "6x6" | "5v5" | "6v6">;
     /** The bet's mode */
@@ -36,4 +36,16 @@ export interface APIGuildBet {
     updatedAt: Date;
     /** Bet's id */
     _id: string;
+    rest: REST;
+    guild: Guild;
+    manager: GuildBetManager;
+    constructor(data: Optional<APIGuildBet>, manager: GuildBetManager);
+    toString(): string;
+    fetch(): Promise<this>;
+    addPlayer(player: APIPlayer): Promise<this>;
+    removePlayer(player: APIPlayer): Promise<this>;
+    update(data: Optional<APIGuildBet>): Promise<this>;
+    delete(): Promise<boolean>;
+    _updateInternals(data: Optional<APIGuildBet>): this;
+    toJSON(): Optional<APIGuildBet>;
 }

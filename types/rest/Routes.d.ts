@@ -20,7 +20,7 @@ export declare const Routes: {
             deleteAll: (guildId: string) => string;
             resource: (guildId: string, userId: string, ...resource: string[]) => string;
         };
-        betUsers: {
+        betusers: {
             getAll: (guildId: string) => string;
             get: (guildId: string, userId: string) => string;
             create: (guildId: string) => string;

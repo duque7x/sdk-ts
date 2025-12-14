@@ -1,4 +1,4 @@
-import { Accessory, APIAdvert, Daily, Items, OriginalChannels } from ".";
+import { Accessory, APIAdvert, Daily, OriginalChannels } from ".";
 export interface Profile {
     bannerUrl?: string;
     avatarUrl?: string;
@@ -33,8 +33,6 @@ export interface APIGuildUser {
     accessories: Accessory[];
     /** User's original channels */
     original_channels: OriginalChannels;
-    /** User's items */
-    items: Items;
     /** Creation Date */
     createdAt: Date;
     /** Updated Date */

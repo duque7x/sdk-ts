@@ -1,6 +1,7 @@
-import { BufferManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "../../managers";
+import { BufferManager, GuildBetManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "../../managers";
+import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
 import { REST } from "../../rest/REST";
-import { APICode, APIGuildAdvert, APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, Optional } from "../../types/api";
+import { APICode, APIGuildAdvert, APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, GuildPermissionsTypes, Optional, Permission } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";
 export declare class Guild {
     /** The data of this guild */
@@ -41,8 +42,11 @@ export declare class Guild {
     users: GuildUserManager;
     logEntries: LogManager;
     shop: APIGuildShop;
+    betusers: GuildBetUserManager;
+    bets: GuildBetManager;
     adverts: APIGuildAdvert[];
     codes: APICode[];
+    coin_symbol: string;
     /**
      * The guild structure
      * @param data The guild's data
@@ -50,20 +54,20 @@ export declare class Guild {
      */
     constructor(data: APIGuild, rest: REST);
     getChannel(type: GuildChannelsType): Promise<APIGuildGroupedChannel>;
+    getPermission(type: GuildPermissionsTypes): Promise<Permission>;
     createAdvert(data: Optional<APIGuildAdvert>): Promise<this>;
     removeAdvert(advertId: string): Promise<this>;
     createCode(data: Optional<APICode>): Promise<this>;
     removeCode(codeId: string): Promise<this>;
     addIdToChannel(type: GuildChannelsType, id: string | string[]): Promise<this>;
     setChannelIds(type: GuildChannelsType, ...ids: string[]): Promise<this>;
-    removeIdInChannel(type: GuildChannelsType, id: string): Promise<this>;
+    removeIdInChannel(type: GuildChannelsType, id: string | string[]): Promise<this>;
     _start(): Promise<this>;
     _updateInternals(data: Optional<APIGuild>): this;
     fetch(): Promise<Guild>;
     update(data: Optional<APIGuild>): Promise<Guild>;
     setStatus(key: keyof GuildStatus, status: "on" | "off"): Promise<this>;
-    addPrice(price: number): Promise<this>;
-    removePrice(price: number): Promise<this>;
+    togglePrice(price: number): Promise<this>;
     setPrefix(prefix: string): Promise<this>;
     toggleDailyCategory(category: keyof Omit<Daily, "date">): Promise<this>;
     setScores(name: AvailableScores, amount: number): Promise<this>;

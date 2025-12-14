@@ -50,8 +50,6 @@ export type OriginalChannel = {
   matchId: string;
 };
 
-/** Items */
-export type Items = string[];
 
 /** Original Channels */
 export type OriginalChannels = OriginalChannel[];

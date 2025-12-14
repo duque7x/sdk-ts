@@ -1,4 +1,5 @@
-import { LogEntry } from "../structures";
+import { GuildBet, GuildTicket, LogEntry } from "../structures";
+import { GuildBetUser } from "../structures/betuser/GuildBetUser";
 import { Collection } from "../structures/Collection";
 import { Guild } from "../structures/guild/Guild";
 import { GuildMatch } from "../structures/match/GuildMatch";
@@ -22,15 +23,25 @@ export interface RestEvents {
     }];
     error: [Error];
     debug: [string];
+    ticketCreate: [GuildTicket];
+    ticketDelete: [GuildTicket];
+    ticketsDelete: [Collection<string, GuildTicket>];
     matchCreate: [GuildMatch];
     matchUpdate: [GuildMatch, GuildMatch];
     matchDelete: [GuildMatch];
     matchesDelete: [Collection<string, GuildMatch>];
+    betCreate: [GuildBet];
+    betUpdate: [GuildBet, GuildBet];
+    betDelete: [GuildBet];
+    betsDelete: [Collection<string, GuildBet>];
     guildUpdate: [Guild];
     guildDelete: [Guild];
     guildsDelete: [Collection<string, Guild>];
     userDelete: [GuildUser];
     userUpdate: [GuildUser];
     usersDelete: [Collection<string, GuildUser>];
+    betuserDelete: [GuildBetUser];
+    betuserUpdate: [GuildBetUser];
+    betusersDelete: [Collection<string, GuildBetUser>];
     logEntryCreate: [LogEntry, Guild];
 }

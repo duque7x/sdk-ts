@@ -12,16 +12,19 @@ export class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
     this.base_url = Routes.guilds.resource(guild.id, "permissions");
   }
 
-  async addRole(type: GuildPermissionsTypes, roleId: string) {
-    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [roleId], type };
-   // if (perm.ids.includes(roleId)) return this.guild;
+  async addRole(type: GuildPermissionsTypes, ...ids: string[]) {
+    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [], type };
 
-    perm.ids.push(roleId);
-    const perms = { ...this.guild.permissions };
+    const _ids = [...new Set([...perm.ids, ...ids])];
+
+    const perms = [...this.guild.permissions];
     let permsIndex = this.guild.permissions.findIndex((p) => p.type === type);
-    perms[permsIndex] = perm;
+
+    if (permsIndex === -1) perms.push({ type, ids: _ids });
+    else perms[permsIndex] = { type, ids: _ids };
 
     const payload = { set: perms };
+
     const response = await this.rest.request<APIGuild, typeof payload>({
       method: "PATCH",
       url: this.base_url,
@@ -33,16 +36,25 @@ export class GuildPermissionManager extends BaseManager<APIGuildPermissions> {
 
     return response;
   }
-  async removeRole(type: GuildPermissionsTypes, roleId: string) {
-    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [], type };
-    if (!perm.ids.includes(roleId)) return this.guild;
-    perm.ids = perm.ids.filter((i) => i !== roleId);
 
-    let perms = { ...this.guild.permissions };
+  async removeRole(type: GuildPermissionsTypes, ...ids: string[]) {
+    const perm = this.guild.permissions.find((p) => p.type === type) || { ids: [], type };
+
+    // Remove matching ids
+    const _ids = [...new Set([...perm.ids.filter((i) => !ids.includes(i))])];
+
+    const perms = [...this.guild.permissions];
     let permsIndex = this.guild.permissions.findIndex((p) => p.type === type);
-    perms[permsIndex] = perm;
+
+    if (permsIndex === -1) {
+      // no existing permission, just push empty version
+      perms.push({ type, ids: _ids });
+    } else {
+      perms[permsIndex] = { type, ids: _ids };
+    }
 
     const payload = { set: perms };
+
     const response = await this.rest.request<APIGuild, typeof payload>({
       method: "PATCH",
       url: this.base_url,

@@ -1,3 +1,5 @@
+export * from "./bet/GuildBet";
+export * from "./betuser/GuildBetUser";
 export * from "./guild/Guild";
 export * from "./logentry/LogEntry";
 export * from "./match/GuildMatch";

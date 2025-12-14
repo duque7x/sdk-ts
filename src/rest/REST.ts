@@ -13,6 +13,8 @@ import { GuildUser } from "../structures/user/GuildUser";
 import { RestEvents, RequestOptions } from "../types/RestTypes";
 import { MinesGameManager } from "../managers";
 import { StatusResponse } from "../types";
+import { GuildBetUser } from "../structures/betuser/GuildBetUser";
+import { GuildBet, GuildTicket, VipMember } from "../structures";
 
 const Reset = "\x1b[0m";
 const FgGreen = "\x1b[32m";
@@ -22,6 +24,7 @@ const FgCyan = "\x1b[36m";
 
 interface ClientOptions {
   clientKey: string;
+  guildId: string;
   authKey: string;
 }
 /**
@@ -33,12 +36,17 @@ export class REST extends EventEmitter {
    */
   clientKey: string;
   authKey: string;
+  guildId: string;
 
   /** The guild manager */
   guilds: GuildManager;
   minesGames: MinesGameManager;
   users: Collection<string, GuildUser>;
+  betusers: Collection<string, GuildBetUser>;
   matches: Collection<string, GuildMatch>;
+  bets: Collection<string, GuildBet>;
+  tickets: Collection<string, GuildTicket>;
+  vipmembers: Collection<string, VipMember>;
 
   /**
    *
@@ -49,18 +57,25 @@ export class REST extends EventEmitter {
 
     this.clientKey = options.clientKey ?? "";
     this.authKey = options.authKey ?? "";
+    this.guildId = options.guildId ?? "";
+
     this.guilds = new GuildManager(this);
     this.minesGames = new MinesGameManager(this);
+
     this.users = new Collection("rest:users");
     this.matches = new Collection("rest:matches");
+    this.bets = new Collection("rest:bets");
+    this.betusers = new Collection("rest:betusers");
+    this.tickets = new Collection("rest:tickets");
+    this.vipmembers = new Collection("rest:vipmembers");
 
     this.setMaxListeners(999);
   }
 
   /** Initialize the caching sistem */
   async init() {
-    if (!this.clientKey || !this.authKey) throw new Error("Key is necessary");
-    await Promise.all([this.guilds.fetch(), this.minesGames.fetch()]);
+    if (!this.clientKey || !this.authKey || !this.guildId) throw new Error("Key is necessary");
+    await Promise.all([this.guilds.fetch({ guildId: this.guildId }), this.minesGames.fetch()]);
     return this;
   }
   /**
@@ -77,19 +92,19 @@ export class REST extends EventEmitter {
     method = method.toUpperCase();
     url = Routes.base + url;
 
-      const headers = new Headers();
-      headers.append("authorization", this.authKey);
-      headers.append("client_key", this.clientKey);
-      headers.append("Content-Type", "application/json");
+    const headers = new Headers();
+    headers.append("authorization", this.authKey);
+    headers.append("client_key", this.clientKey);
+    headers.append("Content-Type", "application/json");
 
-      const before = Date.now();
-      this.emit("debug", [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n"));
-      const body = { ...payload };
-      const res = await request(url, {
-        method,
-        headers,
-        body: JSON.stringify(body),
-      });
+    const before = Date.now();
+    this.emit("debug", [`[Request] ${FgBlue}${method} ${FgCyan}${url}`, Reset].join("\n"));
+    const body = { ...payload };
+    const res = await request(url, {
+      method,
+      headers,
+      body: JSON.stringify(body),
+    });
     const responseBody = await res.body.json();
     const { data, message } = responseBody as Record<string, unknown>;
     const now = new Date().getTime();

@@ -1,5 +1,6 @@
 import {
   BufferManager,
+  GuildBetManager,
   GuildMatchManager,
   GuildPermissionManager,
   GuildTicketManager,
@@ -7,6 +8,7 @@ import {
   LogManager,
   VipMemberManager,
 } from "../../managers";
+import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
 import {
@@ -16,7 +18,9 @@ import {
   APIGuildPermissions,
   APIGuildShop,
   Daily,
+  GuildPermissionsTypes,
   Optional,
+  Permission,
 } from "../../types/api";
 import {
   APIGuild,
@@ -80,20 +84,18 @@ export class Guild {
   prices: GuildPrices;
 
   permissionsManager: GuildPermissionManager;
-
   buffer: BufferManager;
-
   vipMembers: VipMemberManager;
-
   users: GuildUserManager;
-
   logEntries: LogManager;
-
   shop: APIGuildShop;
+  betusers: GuildBetUserManager;
+  bets: GuildBetManager;
 
   adverts: APIGuildAdvert[];
 
   codes: APICode[];
+  coin_symbol: string;
   /**
    * The guild structure
    * @param data The guild's data
@@ -117,6 +119,7 @@ export class Guild {
     this.tickets_configuration = data?.tickets_configuration;
     this.channels = data?.channels;
     this.shop = data?.shop;
+    this.coin_symbol = data?.coin_symbol;
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
@@ -129,6 +132,8 @@ export class Guild {
     this.tickets = new GuildTicketManager(this);
     this.vipMembers = new VipMemberManager(this);
     this.logEntries = new LogManager(this);
+    this.betusers = new GuildBetUserManager(this);
+    this.bets = new GuildBetManager(this);
 
     this.adverts = [];
     for (let _adv of data?.adverts || []) {
@@ -170,6 +175,21 @@ export class Guild {
       });
       this._updateInternals(response);
       return response.channels.find((t) => t.type === type);
+    }
+  }
+  async getPermission(type: GuildPermissionsTypes): Promise<Permission> {
+    const permission = this.permissions.find((c) => c.type === type);
+    if (permission) return permission;
+    else {
+      const permissions = [...this.permissions, { type, ids: [] }];
+      const route = Routes.guilds.get(this.id);
+      const response = await this.rest.request<APIGuild, {}>({
+        method: "PATCH",
+        url: route,
+        payload: { permissions },
+      });
+      this._updateInternals(response);
+      return response.permissions.find((t) => t.type === type);
     }
   }
   async createAdvert(data: Optional<APIGuildAdvert>) {
@@ -225,9 +245,8 @@ export class Guild {
   }
   async setChannelIds(type: GuildChannelsType, ...ids: string[]) {
     const channel = this.channels.find((c) => c.type === type);
-    if (!ids || ids.length === 0) return; 
+    if (!ids || ids.length === 0) return;
 
-    
     if (!channel) {
       // create new channel if it doesn't exist
       this.channels.push({ type, ids });
@@ -249,19 +268,15 @@ export class Guild {
 
     return this._updateInternals(response);
   }
-  async removeIdInChannel(type: GuildChannelsType, id: string) {
+  async removeIdInChannel(type: GuildChannelsType, id: string | string[]) {
     const chIndex = this.channels.findIndex((c) => c.type === type);
 
     if (chIndex !== -1) {
       const existing = this.channels[chIndex];
-      const updatedIds = existing.ids.filter((i) => i !== id);
-
-      this.channels[chIndex] = {
-        ...existing,
-        ids: updatedIds,
-      };
+      const idsToRemove = Array.isArray(id) ? id : [id];
+      existing.ids = existing.ids.filter((i) => !idsToRemove.includes(i));
+      this.channels[chIndex] = existing;
     } else {
-      // If channel doesn't exist, create it with empty ids
       this.channels.push({
         type,
         ids: [],
@@ -286,6 +301,8 @@ export class Guild {
       this.tickets.fetch(),
       this.vipMembers.fetch(),
       this.logEntries.fetch(),
+      this.betusers.fetch(),
+      this.bets.fetch(),
     ]);
     return this;
   }
@@ -374,33 +391,14 @@ export class Guild {
     this.rest.emit("guildUpdate", this);
     return this;
   }
-  async addPrice(price: number) {
+
+  async togglePrice(price: number) {
     Assertion.assertNumber(price);
+    const includesPrice = this.prices.includes(price);
+    if (includesPrice) this.prices = this.prices.filter((p) => p !== price);
+    else this.prices.push(price);
 
-    const route = Routes.fields(Routes.guilds.resource(this.id, "prices"), "used");
-    const payload = { set: price };
-    const response = await this.rest.request<APIGuild, typeof payload>({
-      method: "POST",
-      url: route,
-      payload,
-    });
-    this._updateInternals(response);
-    return this;
-  }
-  async removePrice(price: number) {
-    Assertion.assertNumber(price);
-
-    const route = Routes.fields(Routes.guilds.resource(this.id, "prices"), "used", price.toString());
-    const payload = { set: price };
-    const response = await this.rest.request<number[], typeof payload>({
-      method: "DELETE",
-      url: route,
-      payload,
-    });
-
-    this.prices.used = response;
-    this.rest.guilds.cache.set(this.id, this);
-    this.rest.emit("guildUpdate", this);
+    await this.update({ prices: this.prices });
     return this;
   }
 

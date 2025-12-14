@@ -4,5 +4,8 @@ export interface Permission {
 }
 export type APIGuildPermissions = Permission[];
 export declare enum GuildPermissionsTypes {
-    ManageBot = "manage_bot"
+    ManageBot = "manage_bot",
+    ManageQueues = "manage_queues",
+    ManageUsers = "manage_users",
+    ViewQueueChannels = "view_queue_channels"
 }
