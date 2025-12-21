@@ -1,18 +1,19 @@
 import { APIPlayer } from "./APIPlayer";
 
-export interface APIGuildMediator extends APIPlayer {
+export interface APIGuildMediator {
   /** Mediator's id */
   id: string;
+  guild_id: string;
 
-  /** Mediator's name */
-  name: string;
-
-  /** Mediator's links */
-  paymentLinks: string[];
+  paypal: string;
+  revolut: string;
+  mbway: string;
+  external_links: string[];
+  games: number;
 
   /** Creation Date */
   createdAt: Date;
 
   /** Updated Date */
   updatedAt: Date;
-};
+}

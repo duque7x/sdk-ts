@@ -17,7 +17,7 @@ export class GuildBetManager extends BaseManager<GuildBet> {
     this.cache = new Collection<string, GuildBet>("bets");
   }
   toString() {
-    return this.cache.size  ;
+    return this.cache.size;
   }
   async fetch(options?: FetchOptions) {
     const route = this.base_url;
@@ -30,7 +30,11 @@ export class GuildBetManager extends BaseManager<GuildBet> {
     const response = await this.rest.request<APIGuildBet, {}>({ url: route, method: "GET" });
     return this.set(response);
   }
-
+  async create(data: Optional<APIGuildBet>) {
+    const route = Routes.guilds.bets.create(this.guild.id);
+    const response = await this.rest.request<APIGuildBet, typeof data>({ url: route, method: "POST", payload: data });
+    return this.set(response);
+  }
   async delete(betId?: string) {
     const route = Routes.fields(this.base_url, betId);
     const response = await this.rest.request<APIGuildBet, {}>({ url: route, method: "DELETE" });

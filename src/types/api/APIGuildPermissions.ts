@@ -12,4 +12,6 @@ export enum GuildPermissionsTypes {
   ManageUsers = "manage_users",
 
   ViewQueueChannels = "view_queue_channels",
+
+  MediatorRole = "mediator_role"
 }

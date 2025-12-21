@@ -8,6 +8,7 @@ import { MinesGameManager } from "../managers";
 import { StatusResponse } from "../types";
 import { GuildBetUser } from "../structures/betuser/GuildBetUser";
 import { GuildBet, GuildTicket, VipMember } from "../structures";
+import { GuildMediator } from "../structures/mediator/GuildMediator";
 interface ClientOptions {
     clientKey: string;
     guildId: string;
@@ -32,6 +33,7 @@ export declare class REST extends EventEmitter {
     bets: Collection<string, GuildBet>;
     tickets: Collection<string, GuildTicket>;
     vipmembers: Collection<string, VipMember>;
+    mediators: Collection<string, GuildMediator>;
     /**
      *
      * @param key The unique key for he client
@@ -39,6 +41,7 @@ export declare class REST extends EventEmitter {
     constructor(options: ClientOptions);
     /** Initialize the caching sistem */
     init(): Promise<this>;
+    formatUrl(url: string): string;
     /**
      * Request Data from a certain url
      * @param options

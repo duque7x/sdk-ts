@@ -3,6 +3,7 @@ import { Routes } from "../../rest/Routes";
 import { Assertion } from "../../utils/Assertion";
 import {
   APIBaseChannel,
+  APIGuildBet,
   APIGuildMatch,
   APIMessage,
   APIPlayer,
@@ -14,6 +15,7 @@ import {
 } from "../../types";
 import { GuildMatchManager } from "../../managers";
 import { Guild } from "../guild/Guild";
+import { GuildBet } from "../bet/GuildBet";
 
 export class GuildMatch {
   _id: string;
@@ -65,7 +67,8 @@ export class GuildMatch {
   /** Match's id */
   mvps: [];
   manager: GuildMatchManager;
-
+  bet: GuildBet;
+  admin_id: string;
   /** The given guild */
   readonly guild: Guild;
 
@@ -87,6 +90,7 @@ export class GuildMatch {
     this.guild = manager.guild;
     this.rest = manager.rest;
 
+    this.admin_id = data?.admin_id;
     this.challenge = data?.challenge;
     this.players = data?.players;
 
@@ -95,7 +99,7 @@ export class GuildMatch {
 
     this.type = data?.type;
     this.status = data?.status;
-
+    this.bet = this.guild.bets.cache.get(data?.bet?._id);
     this.mvps = data?.mvps;
     this.winners = data?.winners;
     this.losers = data?.losers;
@@ -126,46 +130,21 @@ export class GuildMatch {
       url: route,
     });
 
-    const match = new GuildMatch(response, this.manager);
-    this.manager.cache.set(match._id, match);
-    return match;
+    return this._updateInternals(response);
   }
-  /* async addMessage(id: string, type: string, content?: string) {
-    const response = await this.messages.create({
-      userId: id,
-      type: type as "img",
-      content,
-    });
 
-    this.manager.cache.set(this._id, this);
-    this.rest.matches.set(this._id, this);
-    return response;
-  } */
-  async addConfirmed(type: string, id: string): Promise<Confirm> {
-    Assertion.assertString(type);
-    Assertion.assertString(id);
+  async addConfirmed(type: string, id: string | string[]): Promise<APIGuildMatch> {
+    const confirmed = this.confirmed.find((c) => c.type === type);
+    const idsToAdd = Array.isArray(id) ? id : [id];
 
-    /*   const confirms = this.confirmed;
-    const con: Confirm = confirms.find((c) => c.type === type) ?? { count: 1, ids: [id], type };
- */
-    const route = Routes.guilds.matches.resource(this.guild.id, this._id, "confirmed");
-    const payload = { type, id };
-
-    const response = await this.rest.request<Confirm[], typeof payload>({
-      method: "PATCH",
-      url: route,
-      payload,
-    });
-
-    this.rest.emit("matchUpdate", this, this);
-
-    this.confirmed = response;
-
-    this.updatedAt = new Date();
-    this.rest.matches.set(this._id, this);
-    this.manager.cache.set(this._id, this);
-    this.guild.buffer.matches.set(this._id, this);
-    return this.confirmed.find((c) => c.type === type);
+    if (!confirmed) {
+      this.confirmed.push({ type, ids: [...idsToAdd], count: idsToAdd.length });
+    } else {
+      const chIndex = this.confirmed.findIndex((ch) => ch.type === type);
+      const mergedIds = [...new Set([...(confirmed.ids || []), ...idsToAdd])];
+      this.confirmed[chIndex] = { ...confirmed, ids: mergedIds, count: mergedIds.length };
+    }
+    return this.update({ confirmed: this.confirmed });
   }
   async setConfirmed(set: Confirm[]): Promise<GuildMatch> {
     Assertion.assertObject(set);
@@ -239,6 +218,18 @@ export class GuildMatch {
     });
     return this._updateInternals(response);
   }
+  async setRoomAdminId(userId: string): Promise<GuildMatch> {
+    Assertion.assertString(userId);
+
+    const payload = { set: userId };
+    const route = Routes.guilds.matches.resource(this.guild.id, this._id, "admin_id");
+    const response = await this.rest.request<APIGuildMatch, {}>({
+      method: "PATCH",
+      url: route,
+      payload,
+    });
+    return this._updateInternals(response);
+  }
   async kick(player: Optional<APIPlayer>) {
     const payload = { set: player };
     const route = Routes.guilds.matches.resource(this.guild.id, this._id, "kickout");
@@ -286,6 +277,9 @@ export class GuildMatch {
       if (key === "id" || key === "createdAt") continue;
       if (key in this) {
         (this as any)[key] = data[key as keyof APIGuildMatch];
+      }
+      if (key === "bet") {
+        this.bet = this.guild.bets.set(data.bet);
       }
     }
 

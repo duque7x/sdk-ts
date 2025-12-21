@@ -24,7 +24,6 @@ export declare class GuildMatchManager extends BaseManager<GuildMatch> {
     fetchAll(): Promise<Collection<string, GuildMatch>>;
     set(data: APIGuildMatch | APIGuildMatch[]): GuildMatch | Collection<string, GuildMatch>;
     create(payload: Optional<APIGuildMatch>): Promise<GuildMatch>;
-    delete(id: string): Promise<Collection<string, GuildMatch>>;
-    deleteAll(): Promise<boolean>;
+    delete(id?: string): Promise<GuildMatch | Collection<string, GuildMatch>>;
 }
 export {};

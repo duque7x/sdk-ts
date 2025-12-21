@@ -1,4 +1,4 @@
-import { Daily,  Profile } from ".";
+import { Daily, Profile } from ".";
 
 /** Bet user */
 export interface APIGuildBetUser {
@@ -6,11 +6,11 @@ export interface APIGuildBetUser {
   daily: Omit<Daily, "points">;
 
   profile: Profile;
-
+  consecutive_wins: number;
   /** User's name */
   id: string;
   guild_id: string;
-  
+
   /** User's credit */
   credit: number;
 

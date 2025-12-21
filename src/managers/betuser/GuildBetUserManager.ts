@@ -67,8 +67,7 @@ export class GuildBetUserManager extends BaseManager<GuildBetUser> {
     });
 
     this.cache.clear();
-    this.set(response);
-    return this.cache;
+    return this.set(response);
   }
 
   set(data: APIGuildBetUser | APIGuildBetUser[]) {

@@ -303,7 +303,7 @@ export class GuildUser implements APIGuildUser {
     let json: { [K in keyof GuildUser]?: GuildUser[K] } = {};
 
     for (const [key, value] of Object.entries(this)) {
-      const exclude = ["rest", "guilds", "manager"];
+      const exclude = ["rest", "guilds", "guild", "manager"];
       if (exclude.includes(key)) continue;
 
       if (typeof value !== "function") {

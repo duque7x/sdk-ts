@@ -3,6 +3,7 @@ import { Routes } from "../../rest/Routes";
 import { Accessory, APIAdvert, Daily, Optional, OriginalChannel, OriginalChannels, Profile } from "../../types/api";
 import { APIGuildBetUser } from "../../types/api/APIGuildBetUser";
 import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
+import { Guild } from "../guild/Guild";
 
 export class GuildBetUser implements APIGuildBetUser {
   /** User daily */
@@ -40,12 +41,13 @@ export class GuildBetUser implements APIGuildBetUser {
 
   /** Updated Date */
   updatedAt: Date;
-
+  consecutive_wins: number;
   /** The given manager */
   readonly manager: GuildBetUserManager;
 
   /** The rest client */
   readonly rest: REST;
+  readonly guild: Guild;
 
   /**
    * Bet user
@@ -58,14 +60,18 @@ export class GuildBetUser implements APIGuildBetUser {
     this.guild_id = data?.guild_id;
     this.manager = manager;
     this.rest = manager.rest;
+    this.guild = manager.guild;
 
     this.wins = data?.wins;
+    this.coins = data?.coins;
     this.losses = data?.losses;
+    this.credit = data?.credit;
 
     this.daily = data?.daily;
     this.games = data?.games;
 
     this.blacklist = data?.blacklist;
+    this.consecutive_wins = data?.consecutive_wins;
 
     this.profile = data?.profile;
 
@@ -173,7 +179,7 @@ export class GuildBetUser implements APIGuildBetUser {
     const route = Routes.guilds.betusers.get(this.manager.guild.id, this.id);
     let payload: Record<string, any> = {};
 
-    const numericFields = ["wins", "credit", "losses", "mvps", "games"] as const;
+    const numericFields = ["wins", "credit", "losses", "mvps", "games", "coins"] as const;
     const arrayFields = ["items", "original_channels", "adverts", "accessories"] as const;
     if (data?.type === "add" || data?.type === "remove") {
       for (const key in data) {
@@ -225,7 +231,7 @@ export class GuildBetUser implements APIGuildBetUser {
     let json: { [K in keyof GuildBetUser]?: GuildBetUser[K] } = {};
 
     for (const [key, value] of Object.entries(this)) {
-      const exclude = ["rest", "guilds", "manager"];
+      const exclude = ["rest", "guilds", "guild", "manager"];
       if (exclude.includes(key)) continue;
 
       if (typeof value !== "function") {

@@ -1,6 +1,6 @@
 import { GuildBetManager } from "../../managers";
 import { REST } from "../../rest";
-import { APIBetChannel, APIGuildBet, APIMessage, APIPlayer, BaseMatchModes, Confirm, Optional } from "../../types";
+import { APIBetChannel, APIGuildBet, APIMessage, APIPlayer, BaseMatchModes, BetQueue, Confirm, Optional } from "../../types";
 import { Guild } from "../guild/Guild";
 export declare class GuildBet {
     /** The bet's type */
@@ -36,13 +36,14 @@ export declare class GuildBet {
     updatedAt: Date;
     /** Bet's id */
     _id: string;
+    queues: BetQueue[];
     rest: REST;
     guild: Guild;
     manager: GuildBetManager;
     constructor(data: Optional<APIGuildBet>, manager: GuildBetManager);
     toString(): string;
     fetch(): Promise<this>;
-    addPlayer(player: APIPlayer): Promise<this>;
+    addPlayer(player: APIPlayer, queue_type?: string): Promise<this>;
     removePlayer(player: APIPlayer): Promise<this>;
     update(data: Optional<APIGuildBet>): Promise<this>;
     delete(): Promise<boolean>;

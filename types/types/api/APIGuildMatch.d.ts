@@ -1,4 +1,4 @@
-import { BaseMatchModes, BaseMatchStatus, Confirm } from ".";
+import { APIGuildBet, BaseMatchModes, BaseMatchStatus, Confirm } from ".";
 import { APIBaseChannel } from "./APIBaseChannel";
 import { APIMessage } from "./APIMessage";
 import { APIPlayer } from "./APIPlayer";
@@ -16,6 +16,7 @@ export interface APIGuildMatch {
     status: BaseMatchStatus;
     /** Match's challenge */
     challenge: boolean;
+    admin_id: string;
     /** Match's players */
     players: APIPlayer[];
     /** Match's winners */
@@ -38,6 +39,7 @@ export interface APIGuildMatch {
     creatorId: string;
     /** Match's room creator id */
     roomCreatorId: string;
+    bet: APIGuildBet;
     /** Creation Date */
     createdAt: Date;
     /** Updated Date */

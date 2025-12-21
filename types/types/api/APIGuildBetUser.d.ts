@@ -4,6 +4,7 @@ export interface APIGuildBetUser {
     /** User daily */
     daily: Omit<Daily, "points">;
     profile: Profile;
+    consecutive_wins: number;
     /** User's name */
     id: string;
     guild_id: string;

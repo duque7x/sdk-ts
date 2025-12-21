@@ -2,6 +2,7 @@ import { REST } from "../../rest/REST";
 import { APIBaseChannel, APIGuildMatch, APIMessage, APIPlayer, BaseMatchModes, BaseMatchStatus, Confirm, MatchSelection, Optional } from "../../types";
 import { GuildMatchManager } from "../../managers";
 import { Guild } from "../guild/Guild";
+import { GuildBet } from "../bet/GuildBet";
 export declare class GuildMatch {
     _id: string;
     selections: MatchSelection[];
@@ -40,6 +41,8 @@ export declare class GuildMatch {
     /** Match's id */
     mvps: [];
     manager: GuildMatchManager;
+    bet: GuildBet;
+    admin_id: string;
     /** The given guild */
     readonly guild: Guild;
     /** The rest client */
@@ -57,13 +60,14 @@ export declare class GuildMatch {
      * @returns New Instance of the match
      */
     fetch(): Promise<GuildMatch>;
-    addConfirmed(type: string, id: string): Promise<Confirm>;
+    addConfirmed(type: string, id: string | string[]): Promise<APIGuildMatch>;
     setConfirmed(set: Confirm[]): Promise<GuildMatch>;
     setStatus(status: BaseMatchStatus): Promise<GuildMatch>;
     setWinners(players: Optional<APIPlayer>[] | Optional<APIPlayer>): Promise<GuildMatch>;
     setLoser(players: Optional<APIPlayer>[] | Optional<APIPlayer>): Promise<GuildMatch>;
     setMvps(...usersId: string[]): Promise<GuildMatch>;
     setRoomCreatorId(userId: string): Promise<GuildMatch>;
+    setRoomAdminId(userId: string): Promise<GuildMatch>;
     kick(player: Optional<APIPlayer>): Promise<this>;
     update(data: Optional<APIGuildMatch>): Promise<GuildMatch>;
     delete(): Promise<boolean>;

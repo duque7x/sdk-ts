@@ -2,6 +2,16 @@ import { BaseMatchModes, Confirm } from ".";
 import { APIBetChannel } from "./APIBetChannel";
 import { APIMessage } from "./APIMessage";
 import { APIPlayer } from "./APIPlayer";
+export interface BetQueue {
+    _id: string;
+    type: string;
+    players: APIPlayer[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+export declare enum BetChannelTypes {
+    CreationChannel = "creation_channel"
+}
 export interface APIGuildBet {
     /** The bet's type */
     type: Omit<BaseMatchModes, "5x5" | "6x6" | "5v5" | "6v6">;
@@ -36,4 +46,5 @@ export interface APIGuildBet {
     updatedAt: Date;
     /** Bet's id */
     _id: string;
+    queues: BetQueue[];
 }

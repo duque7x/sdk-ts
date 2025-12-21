@@ -125,7 +125,7 @@ export class GuildTicketManager {
       }
       return this.cache;
     } else {
-      if (data._id) return;
+      if (!data._id) return;
       const ticket = new GuildTicket(data, this);
       this.cache.set(ticket._id, ticket);
       this.rest.tickets.set(ticket._id, ticket);

@@ -1,6 +1,6 @@
 {
   "name": "@duque.edits/sdk",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "main": "dist/index",
   "types": "./types/index.d.ts",
   "typings": "./types/index.d.ts",

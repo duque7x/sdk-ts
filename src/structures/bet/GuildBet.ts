@@ -1,6 +1,15 @@
 import { GuildBetManager } from "../../managers";
 import { REST, Routes } from "../../rest";
-import { APIBetChannel, APIGuildBet, APIMessage, APIPlayer, BaseMatchModes, Confirm, Optional } from "../../types";
+import {
+  APIBetChannel,
+  APIGuildBet,
+  APIMessage,
+  APIPlayer,
+  BaseMatchModes,
+  BetQueue,
+  Confirm,
+  Optional,
+} from "../../types";
 import { Guild } from "../guild/Guild";
 
 export class GuildBet {
@@ -53,6 +62,7 @@ export class GuildBet {
 
   /** Bet's id */
   _id: string;
+  queues: BetQueue[];
 
   rest: REST;
   guild: Guild;
@@ -81,6 +91,17 @@ export class GuildBet {
 
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
+    this.queues = [];
+
+    for (let queue of data.queues ?? []) {
+      this.queues.push({
+        _id: queue?._id,
+        type: queue?.type,
+        players: queue?.players,
+        updatedAt: queue?.updatedAt ? new Date(queue?.updatedAt) : new Date(),
+        createdAt: queue?.createdAt ? new Date(queue?.createdAt) : new Date(),
+      });
+    }
   }
   toString() {
     return this._id;
@@ -91,36 +112,54 @@ export class GuildBet {
 
     return this._updateInternals(response);
   }
-  async addPlayer(player: APIPlayer) {
-    const isFull = this.players.length === 2;
-    if (isFull) return this;
-
-    const isPlayerIn = this.players.findIndex((p) => p.id === player.id);
-    if (isPlayerIn !== -1) return this;
+  async addPlayer(player: APIPlayer, queue_type?: string) {
+    if (this.players.length === 2) return this;
+    if (this.players.some((p) => p.id === player.id)) return this;
 
     this.players.push(player);
-    const payload = { set: this.players };
 
-    const route = Routes.guilds.bets.resource(this.guild.id, this._id, "players");
-    const response = await this.rest.request<APIGuildBet, typeof payload>({ method: "PATCH", payload, url: route });
-    return this._updateInternals(response);
+    if (queue_type) {
+      const queue = this.queues.find((q) => q.type === queue_type);
+      if (!queue) return this;
+
+      for (const q of this.queues) {
+        q.players = q.players.filter((p) => p.id !== player.id);
+      }
+
+      if (!queue.players.some((p) => p.id === player.id)) {
+        queue.players.push({ id: player.id });
+      }
+    }
+
+    await this.update({
+      players: this.players,
+      queues: this.queues,
+    });
+
+    return this;
   }
+
   async removePlayer(player: APIPlayer) {
-    const isPlayerIn = this.players.findIndex((p) => p.id === player.id);
-    if (isPlayerIn === -1) return this;
+    if (!this.players.some((p) => p.id === player.id)) return this;
 
     this.players = this.players.filter((p) => p.id !== player.id);
-    const payload = { set: this.players };
 
-    const route = Routes.guilds.bets.resource(this.guild.id, this._id, "players");
-    const response = await this.rest.request<APIGuildBet, typeof payload>({ method: "PATCH", payload, url: route });
-    return this._updateInternals(response);
+    for (const q of this.queues) {
+      q.players = q.players.filter((p) => p.id !== player.id);
+    }
+
+    await this.update({
+      players: this.players,
+      queues: this.queues,
+    });
+
+    return this;
   }
+
   async update(data: Optional<APIGuildBet>) {
     const payload = data;
     const route = Routes.guilds.bets.update(this.guild.id, this._id);
     const response = await this.rest.request<APIGuildBet, typeof payload>({ method: "patch", url: route, payload });
-
     return this._updateInternals(response);
   }
   async delete() {
@@ -154,7 +193,7 @@ export class GuildBet {
     let json: { [K in keyof GuildBet]?: GuildBet[K] } = {};
 
     for (const [key, value] of Object.entries(this)) {
-      const exclude = ["rest", "guilds", "manager"];
+      const exclude = ["rest", "guild", "manager"];
       if (exclude.includes(key)) continue;
 
       if (typeof value !== "function") {

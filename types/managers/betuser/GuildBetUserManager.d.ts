@@ -12,7 +12,7 @@ export declare class GuildBetUserManager extends BaseManager<GuildBetUser> {
     fetch(options?: FetchOptions): Promise<Collection<string, GuildBetUser> | GuildBetUser>;
     updateMany(...betusers: Optional<APIGuildBetUser>[]): Promise<Collection<string, GuildBetUser>>;
     deleteAll(): Promise<void>;
-    resetAll(): Promise<Collection<string, GuildBetUser>>;
+    resetAll(): Promise<GuildBetUser | Collection<string, GuildBetUser>>;
     set(data: APIGuildBetUser | APIGuildBetUser[]): GuildBetUser | Collection<string, GuildBetUser>;
 }
 export {};

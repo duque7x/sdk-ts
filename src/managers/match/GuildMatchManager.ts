@@ -22,7 +22,7 @@ export class GuildMatchManager extends BaseManager<GuildMatch> {
     this.guild = guild;
     this.rest = guild.rest;
 
-    this.base_url = Routes.guilds.resource(guild.id, "matches");
+    this.base_url = Routes.guilds.matches.getAll(guild.id);
     this.cache = new Collection<string, GuildMatch>("matches");
   }
 
@@ -76,11 +76,15 @@ export class GuildMatchManager extends BaseManager<GuildMatch> {
     if (!data) return this.cache;
     if (Array.isArray(data)) {
       for (let _match of data) {
+        if (!_match._id) continue;
+
         const match = new GuildMatch(_match, this);
         this.cache.set(match._id, match);
       }
       return this.cache;
     } else {
+      if (!data._id) return this.cache;
+
       const match = new GuildMatch(data, this);
       this.cache.set(match._id, match);
       return match;
@@ -99,30 +103,9 @@ export class GuildMatchManager extends BaseManager<GuildMatch> {
     return this.set(response) as GuildMatch;
   }
 
-  async delete(id: string) {
-    Assertion.assertString(id);
-
-    const route = Routes.guilds.matches.delete(id, this.guild.id);
-    const match = this.cache.get(id);
-    this.rest.emit("matchDelete", match);
-
-    await this.rest.request<boolean, {}>({
-      method: "DELETE",
-      url: route,
-    });
-
-    this.cache.delete(id);
-    return this.cache;
-  }
-  async deleteAll() {
-    const route = Routes.guilds.matches.deleteAll(this.guild.id);
-    this.rest.emit("matchesDelete", this.cache);
-
-    const value = await this.rest.request<boolean, {}>({
-      method: "DELETE",
-      url: route,
-    });
-    this.cache.clear();
-    return value;
+  async delete(id?: string) {
+    const route = Routes.fields(this.base_url, id);
+    const response = await this.rest.request<APIGuildMatch, {}>({ url: route, method: "DELETE" });
+    return this.set(response);
   }
 }

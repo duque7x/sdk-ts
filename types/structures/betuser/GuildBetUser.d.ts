@@ -2,6 +2,7 @@ import { REST } from "../../rest/REST";
 import { Daily, Optional, Profile } from "../../types/api";
 import { APIGuildBetUser } from "../../types/api/APIGuildBetUser";
 import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
+import { Guild } from "../guild/Guild";
 export declare class GuildBetUser implements APIGuildBetUser {
     /** User daily */
     daily: Omit<Daily, "points">;
@@ -27,10 +28,12 @@ export declare class GuildBetUser implements APIGuildBetUser {
     createdAt: Date;
     /** Updated Date */
     updatedAt: Date;
+    consecutive_wins: number;
     /** The given manager */
     readonly manager: GuildBetUserManager;
     /** The rest client */
     readonly rest: REST;
+    readonly guild: Guild;
     /**
      * Bet user
      * @param data  The user's data

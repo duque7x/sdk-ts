@@ -15,6 +15,7 @@ import { MinesGameManager } from "../managers";
 import { StatusResponse } from "../types";
 import { GuildBetUser } from "../structures/betuser/GuildBetUser";
 import { GuildBet, GuildTicket, VipMember } from "../structures";
+import { GuildMediator } from "../structures/mediator/GuildMediator";
 
 const Reset = "\x1b[0m";
 const FgGreen = "\x1b[32m";
@@ -47,6 +48,7 @@ export class REST extends EventEmitter {
   bets: Collection<string, GuildBet>;
   tickets: Collection<string, GuildTicket>;
   vipmembers: Collection<string, VipMember>;
+  mediators: Collection<string, GuildMediator>;
 
   /**
    *
@@ -68,6 +70,7 @@ export class REST extends EventEmitter {
     this.betusers = new Collection("rest:betusers");
     this.tickets = new Collection("rest:tickets");
     this.vipmembers = new Collection("rest:vipmembers");
+    this.mediators = new Collection("rest:mediators");
 
     this.setMaxListeners(999);
   }
@@ -77,6 +80,10 @@ export class REST extends EventEmitter {
     if (!this.clientKey || !this.authKey || !this.guildId) throw new Error("Key is necessary");
     await Promise.all([this.guilds.fetch({ guildId: this.guildId }), this.minesGames.fetch()]);
     return this;
+  }
+
+  formatUrl(url: string) {
+    return url.endsWith("/") ? url.slice(0, url.length - 1) : url;
   }
   /**
    * Request Data from a certain url
@@ -90,7 +97,7 @@ export class REST extends EventEmitter {
     Assertion.assertString(url);
 
     method = method.toUpperCase();
-    url = Routes.base + url;
+    url = this.formatUrl(Routes.base + url);
 
     const headers = new Headers();
     headers.append("authorization", this.authKey);

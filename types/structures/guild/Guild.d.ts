@@ -1,5 +1,6 @@
 import { BufferManager, GuildBetManager, GuildMatchManager, GuildPermissionManager, GuildTicketManager, GuildUserManager, LogManager, VipMemberManager } from "../../managers";
 import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
+import { GuildMediatorManager } from "../../managers/mediator/GuildMediatorManager";
 import { REST } from "../../rest/REST";
 import { APICode, APIGuildAdvert, APIGuildGroupedChannel, APIGuildPermissions, APIGuildShop, Daily, GuildPermissionsTypes, Optional, Permission } from "../../types/api";
 import { APIGuild, DailyCategories, GuildChannelsType, GuildModes, GuildPrices, GuildScores, GuildStatus, GuildTicketConfiguration } from "../../types/api/APIGuild";
@@ -44,6 +45,7 @@ export declare class Guild {
     shop: APIGuildShop;
     betusers: GuildBetUserManager;
     bets: GuildBetManager;
+    mediators: GuildMediatorManager;
     adverts: APIGuildAdvert[];
     codes: APICode[];
     coin_symbol: string;

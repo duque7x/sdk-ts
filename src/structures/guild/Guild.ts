@@ -9,6 +9,7 @@ import {
   VipMemberManager,
 } from "../../managers";
 import { GuildBetUserManager } from "../../managers/betuser/GuildBetUserManager";
+import { GuildMediatorManager } from "../../managers/mediator/GuildMediatorManager";
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
 import {
@@ -33,6 +34,7 @@ import {
   GuildTicketConfiguration,
 } from "../../types/api/APIGuild";
 import { Assertion } from "../../utils/Assertion";
+import { GuildMediator } from "../mediator/GuildMediator";
 export class Guild {
   /** The data of this guild */
   data: APIGuild;
@@ -91,6 +93,7 @@ export class Guild {
   shop: APIGuildShop;
   betusers: GuildBetUserManager;
   bets: GuildBetManager;
+  mediators: GuildMediatorManager;
 
   adverts: APIGuildAdvert[];
 
@@ -134,6 +137,7 @@ export class Guild {
     this.logEntries = new LogManager(this);
     this.betusers = new GuildBetUserManager(this);
     this.bets = new GuildBetManager(this);
+    this.mediators = new GuildMediatorManager(this);
 
     this.adverts = [];
     for (let _adv of data?.adverts || []) {
@@ -303,6 +307,7 @@ export class Guild {
       this.logEntries.fetch(),
       this.betusers.fetch(),
       this.bets.fetch(),
+      this.mediators.fetch(),
     ]);
     return this;
   }
