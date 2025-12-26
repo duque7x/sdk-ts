@@ -13,7 +13,7 @@ import {
   MatchSelection,
   Optional,
 } from "../../types";
-import { GuildMatchManager } from "../../managers";
+import { GuildMatchManager, MessagesManager } from "../../managers";
 import { Guild } from "../guild/Guild";
 import { GuildBet } from "../bet/GuildBet";
 
@@ -63,7 +63,7 @@ export class GuildMatch {
 
   /** Updated Date */
   updatedAt: Date;
-  messages: APIMessage[];
+  messages: MessagesManager<GuildMatch>;
   /** Match's id */
   mvps: [];
   manager: GuildMatchManager;
@@ -94,7 +94,7 @@ export class GuildMatch {
     this.challenge = data?.challenge;
     this.players = data?.players;
 
-    this.messages = data?.messages;
+    this.messages = new MessagesManager(this, Routes.guilds.matches.resource(this.guild_id, this._id, "messages"));
     this.channels = data?.channels;
 
     this.type = data?.type;
@@ -117,6 +117,8 @@ export class GuildMatch {
     this.key = "matches";
     this.createdAt = data?.createdAt ? new Date(data?.createdAt) : new Date();
     this.updatedAt = data?.updatedAt ? new Date(data?.updatedAt) : new Date();
+
+    if (data?.messages?.length !== 0) this.messages.set(data.messages);
   }
 
   /**
@@ -133,7 +135,7 @@ export class GuildMatch {
     return this._updateInternals(response);
   }
 
-  async addConfirmed(type: string, id: string | string[]): Promise<APIGuildMatch> {
+  async addConfirmed(type: string, id: string | string[]): Promise<GuildMatch> {
     const confirmed = this.confirmed.find((c) => c.type === type);
     const idsToAdd = Array.isArray(id) ? id : [id];
 
@@ -265,23 +267,28 @@ export class GuildMatch {
   toJSON() {
     const json: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(this)) {
+      const exclude = ["rest", "guilds", "guild", "manager"];
+      if (exclude.includes(key)) continue;
+
       if (typeof value !== "function") {
         json[key] = value;
       }
     }
-    return json;
+    return { ...json, messages: this.messages.cache.toArray() };
   }
 
   _updateInternals(data: Optional<APIGuildMatch>) {
     for (let key in data) {
-      if (key === "id" || key === "createdAt") continue;
+      if (key === "id" || key === "createdAt" || key === "messages") continue;
       if (key in this) {
         (this as any)[key] = data[key as keyof APIGuildMatch];
       }
       if (key === "bet") {
-        this.bet = this.guild.bets.set(data.bet);
+        this.bet = this.guild.bets.set(data.bet) as GuildBet;
       }
     }
+
+    if (data?.messages?.length !== 0) this.messages.set(data.messages);
 
     this.updatedAt = new Date();
     this.manager.set(this);

@@ -40,7 +40,7 @@ export class GuildBetManager extends BaseManager<GuildBet> {
     const response = await this.rest.request<APIGuildBet, {}>({ url: route, method: "DELETE" });
     return this.set(response);
   }
-  set(data: Optional<APIGuildBet> | Optional<APIGuildBet>[]) {
+  set(data: Optional<APIGuildBet> | Optional<APIGuildBet>[] | GuildBet) {
     if (!data) return;
     if (Array.isArray(data)) {
       for (let _bet of data) {
@@ -51,6 +51,10 @@ export class GuildBetManager extends BaseManager<GuildBet> {
       }
     } else {
       if (!data._id) return;
+      if (data instanceof GuildBet) {
+        this.cache.set(data._id, data);
+        return data;
+      }
       const bet = new GuildBet(data, this);
       this.cache.set(bet._id, bet);
       this.rest.bets.set(bet._id, bet);

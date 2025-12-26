@@ -1,6 +1,7 @@
 import { APIGuildTicket } from "../types";
 export const Routes = {
   base: "https://duque-api.up.railway.app/api/v1",
+  //base: "http://localhost:80/api/v1",
 
   field: (field: string) => `/${field}`,
   fields: (...fields: string[]) => `${fields.join("/")}`,

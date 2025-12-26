@@ -1,6 +1,6 @@
 import { GuildTicketManager } from "../../managers";
 import { REST } from "../../rest";
-import { APIGuildTicket, APILogMessage, Optional } from "../../types";
+import { APIGuildTicket, APIMessage, Optional } from "../../types";
 import { Guild } from "../";
 export declare class GuildTicket implements APIGuildTicket {
     _id: string;
@@ -12,7 +12,7 @@ export declare class GuildTicket implements APIGuildTicket {
     closed_by_id: string;
     creator_id: string;
     customer_rating: number;
-    messages: APILogMessage[];
+    messages: APIMessage[];
     createdAt: Date;
     updatedAt: Date;
     readonly rest: REST;
@@ -25,6 +25,6 @@ export declare class GuildTicket implements APIGuildTicket {
     setChannelId(id: string): Promise<GuildTicket>;
     setClosedById(id: string): Promise<GuildTicket>;
     setStatus(status: "on" | "off"): Promise<GuildTicket>;
-    addMessage(message: Optional<APILogMessage>): Promise<GuildTicket>;
+    addMessage(message: Optional<APIMessage>): Promise<GuildTicket>;
     _updateInternals(data: Optional<APIGuildTicket>): this;
 }

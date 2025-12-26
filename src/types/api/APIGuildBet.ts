@@ -31,7 +31,8 @@ export interface APIGuildBet {
 
   /** The bet's price */
   price: number;
-
+  guild_id: string;
+  
   /** The bet's players */
   players: APIPlayer[];
 

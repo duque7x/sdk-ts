@@ -171,7 +171,6 @@ export interface StatusResponse {
 export * from "./APIAdvert";
 export * from "./APIBaseChannel";
 export * from "./APIBetChannel";
-export * from "./APIBetMessage";
 export * from "./APICode";
 export * from "./APIGiveaway";
 export * from "./APIGuild";
@@ -187,7 +186,6 @@ export * from "./APIGuildShop";
 export * from "./APIGuildTicket";
 export * from "./APIGuildUser";
 export * from "./APILogEntry";
-export * from "./APILogMessage";
 export * from "./APIMessage";
 export * from "./APIMinesGame";
 export * from "./APIPlayer";

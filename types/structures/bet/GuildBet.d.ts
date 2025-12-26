@@ -1,6 +1,6 @@
-import { GuildBetManager } from "../../managers";
+import { GuildBetManager, MessagesManager } from "../../managers";
 import { REST } from "../../rest";
-import { APIBetChannel, APIGuildBet, APIMessage, APIPlayer, BaseMatchModes, BetQueue, Confirm, Optional } from "../../types";
+import { APIBetChannel, APIGuildBet, APIPlayer, BaseMatchModes, BetQueue, Confirm, Optional } from "../../types";
 import { Guild } from "../guild/Guild";
 export declare class GuildBet {
     /** The bet's type */
@@ -19,7 +19,7 @@ export declare class GuildBet {
     /** The bet's channel */
     channels: APIBetChannel[];
     /** The bet's messages */
-    messages: APIMessage[];
+    messages: MessagesManager<GuildBet>;
     /** The id of the winner */
     winners: APIPlayer[];
     /** The id of the loser */
@@ -37,6 +37,7 @@ export declare class GuildBet {
     /** Bet's id */
     _id: string;
     queues: BetQueue[];
+    guild_id: string;
     rest: REST;
     guild: Guild;
     manager: GuildBetManager;

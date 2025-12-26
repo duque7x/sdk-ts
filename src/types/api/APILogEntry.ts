@@ -7,6 +7,13 @@ export enum LogEntryTypes {
 
   UserUpdated = "user_updated",
   UserManaged = "user_managed",
+
+  BetManaged = "bet_managed",
+  BetMediador = "bet_mediador",
+  BetInitiated = "bet_initiated", 
+  BetClosed = "bet_closed",
+  BetAwaitingConfirmation = "bet_awaiting_confirmation",
+  BetCanceled = "bet_canceled"
 }
 
 export interface APILogEntry {

@@ -70,5 +70,5 @@ export declare class GuildUser implements APIGuildUser {
         type?: "add" | "remove";
     }): Promise<this>;
     delete(): Promise<boolean>;
-    toJSON(): Optional<APIGuildUser>;
+    toJSON(): APIGuildUser;
 }

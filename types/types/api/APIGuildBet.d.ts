@@ -23,6 +23,7 @@ export interface APIGuildBet {
     maximumSize: number;
     /** The bet's price */
     price: number;
+    guild_id: string;
     /** The bet's players */
     players: APIPlayer[];
     teams: APIPlayer[][];

@@ -1,6 +1,6 @@
 import { REST } from "../../rest/REST";
 import { APIBaseChannel, APIGuildMatch, APIMessage, APIPlayer, BaseMatchModes, BaseMatchStatus, Confirm, MatchSelection, Optional } from "../../types";
-import { GuildMatchManager } from "../../managers";
+import { GuildMatchManager, MessagesManager } from "../../managers";
 import { Guild } from "../guild/Guild";
 import { GuildBet } from "../bet/GuildBet";
 export declare class GuildMatch {
@@ -37,7 +37,7 @@ export declare class GuildMatch {
     createdAt: Date;
     /** Updated Date */
     updatedAt: Date;
-    messages: APIMessage[];
+    messages: MessagesManager<GuildMatch>;
     /** Match's id */
     mvps: [];
     manager: GuildMatchManager;
@@ -60,7 +60,7 @@ export declare class GuildMatch {
      * @returns New Instance of the match
      */
     fetch(): Promise<GuildMatch>;
-    addConfirmed(type: string, id: string | string[]): Promise<APIGuildMatch>;
+    addConfirmed(type: string, id: string | string[]): Promise<GuildMatch>;
     setConfirmed(set: Confirm[]): Promise<GuildMatch>;
     setStatus(status: BaseMatchStatus): Promise<GuildMatch>;
     setWinners(players: Optional<APIPlayer>[] | Optional<APIPlayer>): Promise<GuildMatch>;
@@ -71,6 +71,8 @@ export declare class GuildMatch {
     kick(player: Optional<APIPlayer>): Promise<this>;
     update(data: Optional<APIGuildMatch>): Promise<GuildMatch>;
     delete(): Promise<boolean>;
-    toJSON(): Record<string, unknown>;
+    toJSON(): {
+        messages: APIMessage[];
+    };
     _updateInternals(data: Optional<APIGuildMatch>): this;
 }

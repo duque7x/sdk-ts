@@ -1,6 +1,6 @@
 import { REST } from "../../rest/REST";
 import { Routes } from "../../rest/Routes";
-import { Accessory, APIAdvert, Daily,  Optional, OriginalChannel, OriginalChannels } from "../../types/api";
+import { Accessory, APIAdvert, Daily, Optional, OriginalChannel, OriginalChannels } from "../../types/api";
 import { APIGuildUser, Profile } from "../../types/api/APIGuildUser";
 import { GuildUserManager } from "../../managers/user/GuildUserManager";
 
@@ -299,7 +299,7 @@ export class GuildUser implements APIGuildUser {
 
     return response;
   }
-  toJSON(): Optional<APIGuildUser> {
+  toJSON(): APIGuildUser {
     let json: { [K in keyof GuildUser]?: GuildUser[K] } = {};
 
     for (const [key, value] of Object.entries(this)) {
@@ -310,7 +310,6 @@ export class GuildUser implements APIGuildUser {
         (json as any)[key] = value;
       }
     }
-    return json;
+    return json as APIGuildUser;
   }
 }
-

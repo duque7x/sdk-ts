@@ -72,7 +72,7 @@ export class GuildMatchManager extends BaseManager<GuildMatch> {
     this.set(response);
     return this.cache;
   }
-  set(data: APIGuildMatch | APIGuildMatch[]) {
+  set(data: APIGuildMatch | APIGuildMatch[] | GuildMatch) {
     if (!data) return this.cache;
     if (Array.isArray(data)) {
       for (let _match of data) {
@@ -84,6 +84,10 @@ export class GuildMatchManager extends BaseManager<GuildMatch> {
       return this.cache;
     } else {
       if (!data._id) return this.cache;
+      if (data instanceof GuildMatch) {
+        this.cache.set(data._id, data);
+        return data;
+      }
 
       const match = new GuildMatch(data, this);
       this.cache.set(match._id, match);

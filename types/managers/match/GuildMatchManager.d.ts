@@ -22,7 +22,7 @@ export declare class GuildMatchManager extends BaseManager<GuildMatch> {
      */
     fetch(options?: Optional<FetchOptions>): Promise<GuildMatch | Collection<string, GuildMatch>>;
     fetchAll(): Promise<Collection<string, GuildMatch>>;
-    set(data: APIGuildMatch | APIGuildMatch[]): GuildMatch | Collection<string, GuildMatch>;
+    set(data: APIGuildMatch | APIGuildMatch[] | GuildMatch): GuildMatch | Collection<string, GuildMatch>;
     create(payload: Optional<APIGuildMatch>): Promise<GuildMatch>;
     delete(id?: string): Promise<GuildMatch | Collection<string, GuildMatch>>;
 }

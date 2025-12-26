@@ -1,4 +1,4 @@
-import { APILogMessage } from "./APILogMessage";
+import { APIMessage } from "./APIMessage";
 export interface APIGuildTicket {
     /** Ticket's id */
     _id: string;
@@ -10,7 +10,7 @@ export interface APIGuildTicket {
     admin_id: string;
     customer_rating: number;
     closed_by_id: string;
-    messages: APILogMessage[];
+    messages: APIMessage[];
     createdAt: Date;
     updatedAt: Date;
 }

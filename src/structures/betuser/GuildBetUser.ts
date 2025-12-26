@@ -126,8 +126,7 @@ export class GuildBetUser implements APIGuildBetUser {
       payload,
     });
 
-    this._updateInternals(response);
-    return this;
+    return this._updateInternals(response);
   }
   async updateProfile(data: Optional<Profile>) {
     const _data: { profile: Profile } = {
@@ -149,8 +148,7 @@ export class GuildBetUser implements APIGuildBetUser {
       payload: _data,
     });
 
-    this._updateInternals(response);
-    return this;
+    return this._updateInternals(response);
   }
   _updateInternals(data: Optional<APIGuildBetUser>) {
     for (let key in data) {
@@ -211,8 +209,7 @@ export class GuildBetUser implements APIGuildBetUser {
       url: route,
       payload,
     });
-    this._updateInternals(response);
-    return this;
+    return this._updateInternals(response);
   }
 
   async delete() {

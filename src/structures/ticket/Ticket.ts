@@ -1,6 +1,6 @@
 import { GuildTicketManager } from "../../managers";
 import { REST, Routes } from "../../rest";
-import { APIGuildTicket, APILogMessage, LogMessage, Optional } from "../../types";
+import { APIGuildTicket, APIMessage, Optional } from "../../types";
 import { Guild } from "../";
 
 export class GuildTicket implements APIGuildTicket {
@@ -14,7 +14,7 @@ export class GuildTicket implements APIGuildTicket {
   closed_by_id: string;
   creator_id: string;
   customer_rating: number;
-  messages: APILogMessage[];
+  messages: APIMessage[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -107,7 +107,7 @@ export class GuildTicket implements APIGuildTicket {
     });
     return this._updateInternals(response);
   }
-  async addMessage(message: Optional<APILogMessage>): Promise<GuildTicket> {
+  async addMessage(message: Optional<APIMessage>): Promise<GuildTicket> {
     const route = Routes.guilds.tickets.resource(this.guild.id, this._id, "messages");
     const payload = { set: [...this.messages, message] };
 

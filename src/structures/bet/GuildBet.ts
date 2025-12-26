@@ -1,4 +1,4 @@
-import { GuildBetManager } from "../../managers";
+import { GuildBetManager, MessagesManager } from "../../managers";
 import { REST, Routes } from "../../rest";
 import {
   APIBetChannel,
@@ -37,7 +37,7 @@ export class GuildBet {
   channels: APIBetChannel[];
 
   /** The bet's messages */
-  messages: APIMessage[];
+  messages: MessagesManager<GuildBet>;
 
   /** The id of the winner */
   winners: APIPlayer[];
@@ -63,6 +63,7 @@ export class GuildBet {
   /** Bet's id */
   _id: string;
   queues: BetQueue[];
+  guild_id: string;
 
   rest: REST;
   guild: Guild;
@@ -74,6 +75,8 @@ export class GuildBet {
     this.rest = manager.rest;
 
     this._id = data?._id;
+    this.guild_id = data?.guild_id;
+
     this.type = data?.type;
     this.mode = data?.mode;
     this.status = data?.status;
@@ -82,7 +85,7 @@ export class GuildBet {
     this.players = data?.players;
     this.teams = data?.teams;
     this.channels = data?.channels;
-    this.messages = data?.messages;
+    this.messages = new MessagesManager(this, Routes.guilds.bets.resource(this.guild_id, this._id, "messages"));
     this.winners = data?.winners;
     this.losers = data?.losers;
     this.creatorId = data?.creatorId;
@@ -102,6 +105,8 @@ export class GuildBet {
         createdAt: queue?.createdAt ? new Date(queue?.createdAt) : new Date(),
       });
     }
+
+    if (data?.messages?.length !== 0) this.messages.set(data.messages);
   }
   toString() {
     return this._id;
@@ -200,6 +205,7 @@ export class GuildBet {
         (json as any)[key] = value;
       }
     }
-    return json;
+
+    return { ...json, messages: this.messages.cache.toArray() };
   }
 }

@@ -4,7 +4,7 @@ import { Guild, GuildMatch, MatchSelection } from "../src";
 client.init().then(async (c) => {
   const guild = c.guilds.cache.get("1336809872884371587")!;
   const match = (await guild.matches.create({
-    type: "2v2",
+    type: "4v4",
     players: [
       {
         id: "Dqueu",
@@ -18,5 +18,10 @@ client.init().then(async (c) => {
     ],
   })) as GuildMatch;
 
-  match.setStatus("on");
+  await match.messages.create({
+    content: Buffer.from("dwdwdwdwdwd", "binary"),
+    author_id: "877598927149490186",
+    extension: "txt",
+  });
+  console.log({ messages: match.messages.cache });
 });

@@ -1,11 +1,9 @@
 export interface APIMessage {
+    _id?: string;
+    author_id?: string;
+    extension?: string;
     /** Message's content */
     content?: string | object;
-    _id?: string;
-    id?: string;
-    extension?: string;
-    /** Message's type */
-    type: string;
     /** Creation Date */
     createdAt?: Date;
     /** Updated Date */
