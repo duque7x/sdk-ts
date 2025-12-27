@@ -136,12 +136,10 @@ export class GuildBet {
       }
     }
 
-    await this.update({
+    return await this.update({
       players: this.players,
       queues: this.queues,
     });
-
-    return this;
   }
 
   async removePlayer(player: APIPlayer) {
@@ -153,12 +151,10 @@ export class GuildBet {
       q.players = q.players.filter((p) => p.id !== player.id);
     }
 
-    await this.update({
+    return await this.update({
       players: this.players,
       queues: this.queues,
     });
-
-    return this;
   }
 
   async update(data: Optional<APIGuildBet>) {
@@ -182,6 +178,10 @@ export class GuildBet {
   _updateInternals(data: Optional<APIGuildBet>) {
     for (let key in data) {
       if (key === "_id" || key === "createdAt") continue;
+      if (key === "messages") {
+        this.messages.set(data[key]);
+        continue;
+      }
       if (key in this) {
         (this as any)[key] = data[key as keyof APIGuildBet];
       }
@@ -206,6 +206,9 @@ export class GuildBet {
       }
     }
 
-    return { ...json, messages: this.messages.cache.toArray() };
+    return {
+      ...json,
+      messages: this?.messages?.cache && this.messages?.cache?.size ? this.messages?.cache?.toArray() : [],
+    };
   }
 }
